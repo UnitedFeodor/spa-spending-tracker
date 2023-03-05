@@ -5,6 +5,7 @@ import Home from './components/home/home';
 import AddPage from './components/add/add';
 import LimitsPage from './components/limits/limits';
 import AuthRootComponent from './components/auth/auth';
+import './index.css' 
 
 function App() {
   return (
