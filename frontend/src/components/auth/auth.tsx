@@ -32,7 +32,7 @@ const AuthRootComponent = () => {
                     boxShadow={'5px 5px 10px #ccc'}
                 >
                     {location.pathname === '/login' ? <LoginPage setEmail={setEmail} setPassword={setPassword}/> : 
-                        location.pathname === '/register' ? <RegisterPage/> : null}
+                        location.pathname === '/register' ? <RegisterPage setEmail={setEmail} setPassword={setPassword}/> : null}
                 </Box>
                 
             </form>

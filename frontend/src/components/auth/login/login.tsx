@@ -1,8 +1,8 @@
-import { Button, TextField, Typography } from '@mui/material';
+import { Button, Link, TextField, Typography } from '@mui/material';
 import React, { Fragment } from 'react';
 
 const LoginPage = (props: any) => {
-    const{setEmail,setPassword} =props
+    const{setEmail,setPassword} = props
 
     return (
         <>
@@ -13,7 +13,7 @@ const LoginPage = (props: any) => {
                 onChange={(e) => {setPassword(e.target.value)}}/>    
             <Button type="submit" variant="contained" sx={{marginTop: 3}}>Sign In</Button>
             <Typography variant="body1" padding={3}>No account?<span className="incitingText">Register</span></Typography>
-
+                
         </>
     );
 };
