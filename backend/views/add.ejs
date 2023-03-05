@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" type="text/css" href="../public/style.css" />
+    <script type="text/javascript" src="../public/validation.js"></script>
+
+</head>
+<body>
+
+    <form name="addForm" method="post" enctype="multipart/form-data" onsubmit="return validateSpendingForm()">
+        <div class="spending-element">        
+
+            <div class="element-amount">
+                <label> AMOUNT </label>
+                <input type="text" name="amount">
+            
+            </div>
+            <div class="element-header">
+                <label> SPENDING TYPE </label>
+                <input type="text" name="type">
+            
+            </div>
+            
+            <div class="element-comment">
+                <label> COMMENTS </label>
+                    <textarea name="comments"></textarea>
+
+            </div>
+
+            <div class="element-file">
+                <input type="file" name="filedata">
+            </div>
+
+            <input type="submit" value="SAVE">
+        </div>
+
+    </form>
+</body>
+</html>

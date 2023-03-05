@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" type="text/css" href="../public/style.css" />
+</head>
+<body>
+ 
+    <div class="limits-info" >
+        <div class="all-limits">
+            <div><%= "Daily Limit:" + helper.dineroToFormatWrapperUSD(locals.limits.dailyLimit) %> </div>
+            <div><%= "Weekly Limit:" + helper.dineroToFormatWrapperUSD(locals.limits.weeklyLimit) %> </div>
+            <div><%= "Monthly Limit:" + helper.dineroToFormatWrapperUSD(locals.limits.monthlyLimit) %> </div>
+            <div><%=  "Yearly Limit:" + helper.dineroToFormatWrapperUSD(locals.limits.yearlyLimit)%> </div>   
+        </div>
+
+        <div class="all-limits" id="spendings">
+            <div>    <%  const totalSpendings = helper.calculateTotalSpendings(locals.list)  %>
+                <%= "Spent in total: " +helper.dineroToFormatWrapperUSD(totalSpendings) + " " %> </div>
+            <div> <%=    helper.checkLimit(totalSpendings,locals.limits.dailyLimit) %> </div>
+        </div>
+    </div>
+
+
+    <div class="spending-element-margins" >
+        <div class="add-new-element">
+            <a href="/add"><button class="add-button">ADD NEW SPENDINGS</button></a>
+            <a href="/limits"><button id="limits-button" class="add-button">CHANGE LIMITS</button></a>
+        </div>
+    </div>
+
+    
+
+    <% for (var i = 0; i < locals.list.length; i++) { %>
+        <div class="spending-element">        
+            
+
+            <div class="element-amount">
+                <%= helper.dineroToFormatWrapperUSD(list[i].amount) %>
+            </div>
+            <div class="element-header">
+                <%= list[i].type %>
+            </div>
+            <div id="element-date" class="element-header">
+                <%= list[i].date.toLocaleString() %>
+            </div>
+            <form name="element-form" method="post" id="delete-form" enctype="multipart/form-data">
+                <input type="hidden" name="_id" value="<%= list[i]._id %>" >
+                <input type="hidden" name="image" value="<%= (locals.list[i].image !== null) ? list[i].image : null %>" >
+                <% console.log("from index list[i].image.path",((locals.list[i].image !== null) ? list[i].image : null )) %>
+                <input type="submit" value="Delete" >
+            </form>
+
+            
+            <br>
+            <div class="element-comment">
+                
+                <% if (locals.list[i].image !== null) { %>
+                    <% console.log("img src =",locals.list[i].image) %>
+                    <img src="<%= locals.list[i].image %>" width="300" height="300" >
+                    <br>
+                <% } %>
+                
+                <%= list[i].comments %>
+            </div>
+
+        </div>
+
+    <% } %>
+</body>
+</html>
