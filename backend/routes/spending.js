@@ -135,7 +135,8 @@ router.post('/add', async (req,res) => {
     //post.markModified('amount')
     try {
         await post.save();
-        res.redirect('/')
+        res.send("OK")
+        //res.redirect('/')
     } catch (error) {
         response.status(500).send(error);
     }
