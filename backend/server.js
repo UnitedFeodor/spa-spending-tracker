@@ -2,6 +2,7 @@ const express = require('express')
 const app = express()
 const mongoose = require('mongoose')
 const path = require('path')
+var cors = require('cors')
 // mongodb+srv://user:<password>@cluster0.adt1pnf.mongodb.net/?retryWrites=true&w=majority
 
 
@@ -18,6 +19,7 @@ app.use('/uploads', express.static(path.join(__dirname, './uploads/')))
 const PORT = 3001
 
 const taskRouter = require('./routes/spending')
+app.use(cors())
 app.use('/api',taskRouter) 
 
 async function start() {

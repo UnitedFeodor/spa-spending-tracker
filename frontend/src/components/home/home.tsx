@@ -107,7 +107,7 @@ const Home = () => {
                             <div className="element-header">{item.type}</div>
                         </td>
                         <td>
-                            <form name="element-form" method="post" id="delete-form" encType="multipart/form-data">
+                            <form name="element-form" method="post" id="delete-form" encType="multipart/form-data" action="/api/spendings">
                                 <input type="hidden" name="_id" value={String(item._id)} />
                                 <input type="hidden" name="image" value={(item.image !== null) ? String(item.image)  : '' } />
                                 <input type="submit" value="Delete"/>

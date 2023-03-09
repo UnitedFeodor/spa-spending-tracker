@@ -73,40 +73,7 @@ router.get('/spendings', async (req,res) => {
 })
 
 
-router.get('/', async (req,res) => {
-    console.log("get /")
-    const dbPosts = await postModel.find({})
-
-    console.log("dbPosts",dbPosts)
-    let listToShow = []
-    dbPosts.forEach(element => {
-        let dineroAmount = helper.parseUSDFromFormattedString(element.amount)
-        //console.log("in dbPosts: ",element._id.toString())
-        listToShow.push(formNewSpendingWithId(element._id.toString(),dineroAmount, element.type, element.comments, element.date, element.image))
-    }); 
-
-    //listToShow = listToShow.concat(list)
-    listToShow.sort(function(a,b){
-        // Turn your strings into dates, and then subtract them
-        // to get a value that is either negative, positive, or zero.
-        return b.date - a.date;
-      });
-
-    params.list = listToShow
-    
-    try {
-        res.render('index', params)
-      } catch (error) {
-        response.status(500).send(error);
-    } 
-    
-    //res.json( {message: "bebra"})
-    
-    //res.json(listToShow)
-
-})
-
-router.post('/', async (req,res) => { // delete
+router.post('/spendings', async (req,res) => { // delete
     console.log("post /")
 
     /*
@@ -131,7 +98,7 @@ router.post('/', async (req,res) => { // delete
         await postModel.deleteOne(_id)  
         //await postModel.findByID(_id)
         console.log(await postModel.countDocuments(_id))// 0
-        res.redirect('/')
+        res.redirect("/")
     } catch (error) {
         res.status(500).send(error);
     }
