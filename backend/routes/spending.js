@@ -13,8 +13,8 @@ const helper = require('../model/helper');
 
 
 var list = [
-    { _id: "1",amount: Dinero({amount: 10000,currency: 'USD'}), type: "food", comments: "cola pizza burgir", date: new Date(), image: null },
-    { _id: "2",amount: Dinero({amount: 30000,currency: 'USD'}), type: "gym", comments: "gachi is life" , date: new Date(), image: 'uploads\\maxresdefault.jpg' },
+    { _id: "1",amount: "1000", type: "food", comments: "cola pizza burgir", date: new Date(), image: null },
+    { _id: "2",amount: "12000", type: "gym", comments: "gachi is life" , date: new Date(), image: 'uploads\\maxresdefault.jpg' },
     { _id: "3",amount: Dinero({amount: 300,currency: 'USD'}), type: "coke", comments: "mmm delicious" , date: new Date(), image: null }
     ]; 
 
@@ -42,14 +42,16 @@ function formNewSpendingWithId(_id,amount,type,comments,date,image) {
     return entry
 }
 
-router.get('/api', async (req,res) => {
+router.get('/spendings', async (req,res) => {
     console.log("get /")
     const dbPosts = await postModel.find({})
 
     console.log("dbPosts",dbPosts)
     let listToShow = []
     dbPosts.forEach(element => {
-        let dineroAmount = helper.parseUSDFromFormattedString(element.amount)
+        //let dineroAmount = helper.parseUSDFromFormattedString(element.amount)
+        const dineroAmount = element.amount
+
         //console.log("in dbPosts: ",element._id.toString())
         listToShow.push(formNewSpendingWithId(element._id.toString(),dineroAmount, element.type, element.comments, element.date, element.image))
     }); 
@@ -61,9 +63,9 @@ router.get('/api', async (req,res) => {
         return b.date - a.date;
       });
 
-    params.list = listToShow
+    params.list = list
 
-    res.json(listToShow)
+    res.json(dbPosts)
 })
 
 
