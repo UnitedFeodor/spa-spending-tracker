@@ -18,7 +18,7 @@ app.use('/uploads', express.static(path.join(__dirname, './uploads/')))
 const PORT = 3001
 
 const taskRouter = require('./routes/spending')
-app.use('/',taskRouter) 
+app.use('/api',taskRouter) 
 
 async function start() {
     try {

@@ -2,27 +2,32 @@ import axios from 'axios'
 import React, { Fragment, Key, useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import './style.css'
+import  Dinero from "dinero.js";
 
 const Home = () => {
     const [spendingsList,setSpendingsList] = useState(null)
+    const [limits,setLimits] = useState(null as any)
+    const [helper,setHelper] = useState(null as any)
 
 /*    
     useEffect(() => {
         fetch('/spendings')
         .then(res => res.json())
-        .then(res => setSpendingsList(res)) 
+        .then(res => setParams(res)) 
     }, [])
     */
 
     useEffect(() => {
-        const apiUrl = '/spendings';
+        const apiUrl = '/api/spendings';
         axios.get(apiUrl).then((resp) => {
           const data = resp.data;
           console.log("resp.data is ",resp.data);
           console.log("resp.data.list is ",resp.data.list);
           setSpendingsList(data.list);
+          setLimits(data.limits)
+          setHelper(data.helper)
         });
-      }, [setSpendingsList]);
+      }, []);
     
 
     console.log("spendingList is ",spendingsList)
@@ -38,22 +43,51 @@ const Home = () => {
         image: String,
     
     }
+    interface ILimits {
+        dailyLimit: Dinero.Dinero;
+        weeklyLimit: Dinero.Dinero;
+        monthlyLimit: Dinero.Dinero;
+        yearlyLimit: Dinero.Dinero;
+    }
     
-    const arr: ISpending[] = spendingsList as unknown as ISpending[]
+    const spendingsArray: ISpending[] = spendingsList as unknown as ISpending[]
+    const limitsObj: ILimits = limits as unknown as ILimits 
+    let limitsPanel = null
+    if(limitsObj !== null && helper !== null) {
+        limitsPanel = <Fragment>
+                <div className="limits-info" >
+                    <div className="all-limits">
+                        <div>Daily Limit:{limits.limits.dailyLimit} </div>
+                        <div>Weekly Limit:{limits.limits.weeklyLimit}</div>
+                        <div>Monthly Limit:{limits.limits.monthlyLimit} </div>
+                        <div>Yearly Limit:{limits.limits.yearlyLimit} </div>   
+                    </div>
+
+                    <div className="all-limits" id="spendings">
+                        <div>    
+                            Spent in total: {limits.total}</div>
+                        <div>{limits.checks.exceedingDaily}</div>
+                    </div>
+                </div>
+            
+            </Fragment>
+
+    }
 
     /*
-    const Test = ({arr} : any) => (
+    const Test = ({spendingsArray} : any) => (
         <>
-          {arr.map((el: any) => (
+          {spendingsArray.map((el: any) => (
             <div key={el.type} className='element'>{el.type}</div>
           ))}
         </>
       );
 */
-    let listItems = null
-    if (arr !== null) {
 
-        listItems = arr.map((item) => (
+    let listItems = null
+    if (spendingsArray !== null) {
+
+        listItems = spendingsArray.map((item) => (
             <Fragment key={item._id as Key}>
                 {/*}
                 <li>
@@ -112,8 +146,20 @@ const Home = () => {
                 <li><Link to='/add'>add</Link></li>
                 <li><Link to='/limits'>limits</Link></li>
             </nav>
+
+
+            {!limitsPanel ?'no limits :(' :  limitsPanel}
+
+
+            <div className="spending-element-margins" >
+                <div className="add-new-element">
+                    <a href="/add"><button className="add-button">ADD NEW SPENDINGS</button></a>
+                    <a href="/limits"><button id="limits-button" className="add-button">CHANGE LIMITS</button></a>
+                </div>
+            </div>
+
             <table className='tableWrapper'>
-                {!listItems ?'sadly null :(' :  listItems}
+                {!listItems ?'no spendigns :(' :  listItems}
             </table>
         </div>
     )
@@ -128,7 +174,7 @@ const Home = () => {
                 <li><Link to='/add'>add</Link></li>
                 <li><Link to='/limits'>limits</Link></li>
             </nav>
-            { !arr ?'sadly null :(' : <Test arr={arr}/>}
+            { !spendingsArray ?'sadly null :(' : <Test spendingsArray={spendingsArray}/>}
             
 
         </div>

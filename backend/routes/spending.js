@@ -6,6 +6,7 @@ const postModel = require("../model/post");
 const mongoose = require('mongoose')
 const fs = require('fs');
 const path = require('path');
+
 //router.use(multer({dest:"uploads"}).single("filedata"));
 
 
@@ -26,7 +27,7 @@ let params = {
     limits, 
     helper
 }
-
+params.helper = helper
 function addNewSpending(amount,type,comments,date,image) {
     let entry = {amount,type,comments,date,image}
     params.list.push(entry)
@@ -42,18 +43,19 @@ function formNewSpendingWithId(_id,amount,type,comments,date,image) {
     return entry
 }
 
+
 router.get('/spendings', async (req,res) => {
     console.log("get /")
     const dbPosts = await postModel.find({})
 
     console.log("dbPosts",dbPosts)
     let listToShow = []
+    let dineroList = []
     dbPosts.forEach(element => {
-        //let dineroAmount = helper.parseUSDFromFormattedString(element.amount)
-        const dineroAmount = element.amount
-
+        let dineroAmount = { amount: helper.parseUSDFromFormattedString(element.amount) }
+        dineroList.push(dineroAmount)
         //console.log("in dbPosts: ",element._id.toString())
-        listToShow.push(formNewSpendingWithId(element._id.toString(),dineroAmount, element.type, element.comments, element.date, element.image))
+        listToShow.push(formNewSpendingWithId(element._id.toString(),element.amount, element.type, element.comments, element.date, element.image))
     }); 
 
     //listToShow = listToShow.concat(list)
@@ -64,6 +66,8 @@ router.get('/spendings', async (req,res) => {
       });
 
     params.list = listToShow
+
+    params.limits = helper.getFullLimitsInfo(limits,dineroList)
 
     res.json(params)
 })

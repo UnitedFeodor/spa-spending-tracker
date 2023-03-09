@@ -121,6 +121,24 @@ function setLimitsFromYearly(yearlyLimit,month,year) {
     }
 }
 
+function dineroLimitsToAmount(limitsObj) {
+    return limits = {
+        dailyLimit: limitsObj.dailyLimit.getAmount(),
+        weeklyLimit: limitsObj.weeklyLimit.getAmount(),
+        monthlyLimit: limitsObj.monthlyLimit.getAmount(),
+        yearlyLimit: limitsObj.yearlyLimit.getAmount()
+    }
+}
+
+function dineroLimitsToFormat(limitsObj) {
+    return limits = {
+        dailyLimit: limitsObj.dailyLimit.toFormat('$0.00'),
+        weeklyLimit: limitsObj.weeklyLimit.toFormat('$0.00'),
+        monthlyLimit: limitsObj.monthlyLimit.toFormat('$0.00'),
+        yearlyLimit: limitsObj.yearlyLimit.toFormat('$0.00'),
+    }
+}
+
 function chooseLimitFuncByInput(inputNum,amount,month,year){
     console.log("chooseLimitFuncByInput")
     console.log(amount.getAmount(),"is dailyLimit;",month,"is month;", year,"is year")
@@ -147,7 +165,40 @@ function daysInYear(year) {
 }
 
 
+/*
+limits and stuff needed:
 
+daily weekly monthly yearly
+total spendings +
+exceeding each one by how much +
+
+*/
+function getAllLimitsChecks(limits,spendingsList) {
+    const totalSpendings = calculateTotalSpendings(spendingsList)
+    const exceedingDaily = checkLimit(totalSpendings, limits.dailyLimit)
+    const exceedingWeekly = checkLimit(totalSpendings, limits.weeklyLimit)
+    const exceedingMonthly = checkLimit(totalSpendings, limits.monthlyLimit)
+    const exceedingYearly = checkLimit(totalSpendings, limits.yearlyLimit)
+    return {
+        exceedingDaily,
+        exceedingWeekly,
+        exceedingMonthly,
+        exceedingYearly
+    }
+
+}
+
+function getFullLimitsInfo(limits,spendingsList) {
+    const totalSpendings = calculateTotalSpendings(spendingsList).toFormat('$0.00')
+    
+    return fullLimitsInfo = {
+        limits: dineroLimitsToFormat(limits),
+        checks: getAllLimitsChecks(limits, spendingsList),
+        total: totalSpendings
+    }
+
+
+}
 
 
 
@@ -159,5 +210,7 @@ module.exports = {
     setLimitsFromMonthly : setLimitsFromMonthly,
     parseUSDFromFormattedString : parseUSDFromFormattedString,
     chooseLimitFuncByInput : chooseLimitFuncByInput,
-    dineroToFormattedNumberUSD : dineroToFormattedNumberUSD
+    dineroToFormattedNumberUSD : dineroToFormattedNumberUSD,
+    dineroLimitsToAmount : dineroLimitsToAmount,
+    getFullLimitsInfo
 }
