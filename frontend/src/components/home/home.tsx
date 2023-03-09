@@ -1,5 +1,5 @@
 import axios from 'axios'
-import React, { Fragment, Key, useEffect, useState } from 'react'
+import React, { Fragment, Key, useEffect, useReducer, useState } from 'react'
 import { Link } from 'react-router-dom'
 import './style.css'
 import  Dinero from "dinero.js";
@@ -7,28 +7,65 @@ import  Dinero from "dinero.js";
 const Home = () => {
     const [spendingsList,setSpendingsList] = useState(null)
     const [limits,setLimits] = useState(null as any)
-    const [helper,setHelper] = useState(null as any)
 
-/*    
-    useEffect(() => {
-        fetch('/spendings')
-        .then(res => res.json())
-        .then(res => setParams(res)) 
-    }, [])
-    */
+    const [ignored, forceUpdate] = useReducer(x => x + 1, 0);
+
 
     useEffect(() => {
         const apiUrl = '/api/spendings';
         axios.get(apiUrl).then((resp) => {
-          const data = resp.data;
-          console.log("resp.data is ",resp.data);
-          console.log("resp.data.list is ",resp.data.list);
-          setSpendingsList(data.list);
-          setLimits(data.limits)
-          setHelper(data.helper)
+            console.log("get.then in useEffect")
+            const data = resp.data;
+            console.log("resp.data is ",resp.data);
+            console.log("resp.data.list is ",resp.data.list);
+            setSpendingsList(data.list);
+            setLimits(data.limits)
         });
       }, []);
     
+    
+    const handleSubmit = (event : any) => {
+        console.log('handleSubmit ran');
+        event.preventDefault();
+        
+        axios.postForm('/api/spendings', {
+            _id: event.target._id.value,
+            image:  event.target.image.value,
+        }).then((res) => {
+            console.log("postForm.then")
+            const apiUrl = '/api/spendings';
+            axios.get(apiUrl).then((resp) => {
+            console.log("get in post.then  ")
+            const data = resp.data;
+            console.log("resp.data is ",resp.data);
+            console.log("resp.data.list is ",resp.data.list);
+            setSpendingsList(data.list);
+            setLimits(data.limits)
+        });
+        }).catch(function (error) {
+            if (error.response) {
+              // The request was made and the server responded with a status code
+              // that falls out of the range of 2xx
+              console.log(error.response.data);
+              console.log(error.response.status);
+              console.log(error.response.headers);
+            } else if (error.request) {
+              // The request was made but no response was received
+              // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
+              // http.ClientRequest in node.js
+              console.log(error.request);
+            } else {
+              // Something happened in setting up the request that triggered an Error
+              console.log('Error', error.message);
+            }
+            console.log(error.config);
+          });
+
+        //"proxy": "http://localhost:3001"
+
+        // eslint-disable-next-line react-hooks/rules-of-hooks
+        forceUpdate()
+    }
 
     console.log("spendingList is ",spendingsList)
 
@@ -53,7 +90,7 @@ const Home = () => {
     const spendingsArray: ISpending[] = spendingsList as unknown as ISpending[]
     const limitsObj: ILimits = limits as unknown as ILimits 
     let limitsPanel = null
-    if(limitsObj !== null && helper !== null) {
+    if(limitsObj !== null) {
         limitsPanel = <Fragment>
                 <div className="limits-info" >
                     <div className="all-limits">
@@ -107,7 +144,7 @@ const Home = () => {
                             <div className="element-header">{item.type}</div>
                         </td>
                         <td>
-                            <form name="element-form" method="post" id="delete-form" encType="multipart/form-data" action="/api/spendings">
+                            <form name="element-form" method="post" id="delete-form" encType="multipart/form-data" action="/api/spendings" onSubmit={handleSubmit}>
                                 <input type="hidden" name="_id" value={String(item._id)} />
                                 <input type="hidden" name="image" value={(item.image !== null) ? String(item.image)  : '' } />
                                 <input type="submit" value="Delete"/>

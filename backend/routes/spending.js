@@ -76,18 +76,11 @@ router.get('/spendings', async (req,res) => {
 router.post('/spendings', async (req,res) => { // delete
     console.log("post /")
 
-    /*
-    const amount = req.body.amount
-    const type = req.body.type
-    const comments = req.body.comments 
-    let date = req.body.date
-    const image = req.body.image
-    console.log("id from req body: ",req.body._id)*/
-
     const _id = new mongoose.Types.ObjectId(req.body._id)
     const image = req.body.image
-    if (image !== null && image !=='') {
-        
+    console.log("image value is:",image)
+    if (image !== null && image !=='' && image !==' ') {
+        console.log("image not null and not empty!!!")
         const filePath = path.join(__dirname,'..',image) 
         console.log(filePath)
         fs.unlinkSync(filePath)
@@ -98,7 +91,8 @@ router.post('/spendings', async (req,res) => { // delete
         await postModel.deleteOne(_id)  
         //await postModel.findByID(_id)
         console.log(await postModel.countDocuments(_id))// 0
-        res.redirect("/")
+        res.send("OK")
+        //res.redirect("/")
     } catch (error) {
         res.status(500).send(error);
     }

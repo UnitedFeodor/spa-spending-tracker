@@ -7,7 +7,7 @@ function validateSpendingForm() {
     
     return validateInputUSD(amount,false)
 }
-//TODO negative number and 0 check
+// TODO negative number and 0 check
 
 function validateLimitsForm() {
     console.log("validateLimitsForm")
@@ -33,6 +33,7 @@ function validateInputUSD(amount,isPositive) {
         }
     }
 
+    let afterDotSymbols = 0
     let arr = amount.split(".")
     if (arr.length === 1) {
         afterDotSymbols = 0
