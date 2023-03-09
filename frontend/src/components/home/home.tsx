@@ -18,17 +18,18 @@ const Home = () => {
         const apiUrl = '/spendings';
         axios.get(apiUrl).then((resp) => {
           const data = resp.data;
-          console.log(resp.data);
-          setSpendingsList(data);
+          console.log("resp.data is ",resp.data);
+          console.log("resp.data.list is ",resp.data.list);
+          setSpendingsList(data.list);
         });
       }, [setSpendingsList]);
     
 
-    console.log(spendingsList)
+    console.log("spendingList is ",spendingsList)
 
     interface ISpending {
         //  Dinero({amount: 10000,currency: 'USD'})
-        _id: any,
+        _id: String,
         amount:  String,
 
         type:String, 
@@ -64,39 +65,33 @@ const Home = () => {
                 </li>
                 {*/}
                 <div className="spending-element">        
-            
                     <tr>
                         <td>
-                            <div className="element-amount">
-                                {item.amount}
-                            </div>
+                        <div className="element-amount">{item.amount}</div>
                         </td>
                         <td>
-                            <div className="element-header">
-                                {item.type}
-                            </div>
+                            <div className="element-header">{item.type}</div>
                         </td>
                         <td>
                             <form name="element-form" method="post" id="delete-form" encType="multipart/form-data">
-                                <input type="hidden" name="_id" value={item._id} />
+                                <input type="hidden" name="_id" value={String(item._id)} />
                                 <input type="hidden" name="image" value={(item.image !== null) ? String(item.image)  : '' } />
                                 <input type="submit" value="Delete"/>
                             </form>
                         </td>
                     </tr>
-                    <tr>
-                    <div id="element-date" className="element-header">
-                        {item.date.toLocaleString()}    
-                    </div>
+                    <tr >
+                        <div id="element-date" className="element-header">
+                            {new Date(item.date).toLocaleDateString()}   
+                        </div> 
                     </tr>
                 
-                    <tr>
-                    <br></br>
-                    <div className="element-comment">
-                        <img src={String(item.image)} width="300" height="300" alt=" "></img>
-                        <br></br>
-                        {item.comments}
-                    </div>
+                    <tr >
+                        <div className="element-comment">
+                            <img src={String(item.image)} width="300" height="300" alt=" "></img>
+                            <br></br>
+                            {item.comments}
+                        </div>
                     </tr>
                 </div>
 
@@ -106,7 +101,7 @@ const Home = () => {
 
     // TODO fix all the margins
     // TODO fix null images
-    
+    console.log("listItems is ", listItems)
     return(
         <div>
             <h1> this is the home page</h1>
@@ -121,8 +116,6 @@ const Home = () => {
                 {!listItems ?'sadly null :(' :  listItems}
             </table>
         </div>
-        
-
     )
       /*
     return (

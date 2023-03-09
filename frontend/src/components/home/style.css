@@ -1,0 +1,218 @@
+.tableWrapper {
+    margin: 0px;
+    align-self: center;
+    width: 100%;
+}
+
+.limits-info {
+    background-color: darkolivegreen;
+    -webkit-text-fill-color: wheat; 
+    width: 100%;
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.all-limits > div{
+    width: auto;
+    display: inline-block;
+    margin: 10px;
+    margin: left 20px;;
+    border-bottom: solid wheat 1px;
+    border-radius: 4px;
+}
+
+#spendings {
+    font-size: x-large;
+    font-family:Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+}
+
+.add-new-element {
+    
+    overflow: auto;
+    display: block;
+    
+}
+
+label {
+    margin-bottom: 0px;
+}
+
+input {
+    -webkit-text-fill-color: brown; 
+    
+}
+input[type=text] {
+
+    border-radius: 4px;
+    height: 30px;
+    top:0px;
+
+    
+}
+input[type=submit] {
+    border-radius: 4px;
+    border: 3px solid wheat;
+    background-color: wheat;
+    height: 40px;
+    padding: 10px 40px;
+    
+
+    
+}
+input[type=file] {
+    
+    background-color: white;
+    margin-bottom: 10px;
+    
+}
+
+#delete-form > input[type=submit] {
+    border-radius: 4px;
+    border: 3px solid wheat;
+    background-color: wheat;
+    font-size: small;
+    padding: 0%;
+    max-height: fit-content;
+
+    display: block;
+    margin-left: auto;
+    margin-right: 0;
+}
+
+textarea {
+    width: 100%;
+    height: 150px;
+    padding: 12px 20px;
+    box-sizing: border-box;
+
+    border-radius: 4px;
+    background-color: #f8f8f8;
+    -webkit-text-fill-color: brown;
+    resize: none;
+  }
+
+.add-button {
+    background-color: brown;
+    -webkit-text-fill-color: wheat;
+    border: 3px solid wheat;
+    border-radius: 4px;
+    min-height: 15px;
+    padding: 0px 40px;
+    min-width: 320px;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: larger;
+    
+}
+#limits-button {
+    background-color: darkolivegreen;
+}
+#limits-button:hover {
+    background: wheat;
+	color:darkolivegreen;
+    -webkit-text-fill-color: darkolivegreen;
+	box-shadow: inset 0 0 0 3px darkolivegreen;
+}
+
+button:hover {
+	background: wheat;
+	color:brown;
+    -webkit-text-fill-color: brown;
+	box-shadow: inset 0 0 0 3px brown;
+}
+
+.spending-element-margins {
+    margin: auto;
+    /*width: 50%;
+    */
+    overflow: auto;
+    border: 0px solid wheat;
+    margin-bottom: 10px;
+    display: block;
+}
+
+.spending-element {
+    position: relative;
+    margin: auto;
+    /*
+    width: 50%;
+    */
+    border: 3px solid wheat;
+    background-color: brown;
+    -webkit-text-fill-color: wheat;
+    font-family:Arial, Helvetica, sans-serif;
+    overflow: auto;
+    margin-bottom: 10px;
+    padding: 10px;
+    display: block;
+}
+
+#limit-spending-element {
+    background-color: darkolivegreen; 
+}
+.limits-select {
+    -webkit-text-fill-color: black;
+    border-radius: 4px;
+    height: 30px;
+    top:0px;
+}
+
+.element-header,.element-amount {
+    display: inline-block;
+    font-size: xx-large;
+    font-family:Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+
+    border-bottom: 2px solid wheat;
+    margin: auto;
+
+
+}
+.spending-element > td {
+    width: 1%;
+    white-space: nowrap;
+    text-align:right;
+}
+.spending-element > tr {
+    width: 1%;
+    white-space: nowrap;
+    text-align:right;
+}
+/*
+.spending-element > .element-header{
+
+    float: left;
+    width: fit-content;
+    
+}
+
+.spending-element > .element-amount {
+    
+    float: left;
+    width:auto;
+
+}
+*/
+
+.element-header {
+    margin-left: 10px;
+    display:block
+}
+
+#element-date {
+    font-family:Arial, Helvetica, sans-serif;
+    font-size: smaller;
+    border: none;
+    
+}
+
+.element-comment {
+    margin: auto;
+    display: block;
+    border: 3px wheat ;
+    width: 100%;
+
+}
+
+img { 
+    max-width: 100%; 
+    height: auto;
+}

@@ -63,9 +63,9 @@ router.get('/spendings', async (req,res) => {
         return b.date - a.date;
       });
 
-    params.list = list
+    params.list = listToShow
 
-    res.json(dbPosts)
+    res.json(params)
 })
 
 
