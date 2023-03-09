@@ -1,6 +1,7 @@
 import axios from 'axios'
 import React, { Fragment, Key, useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
+import './style.css'
 
 const Home = () => {
     const [spendingsList,setSpendingsList] = useState(null)
@@ -39,7 +40,7 @@ const Home = () => {
     
     const arr: ISpending[] = spendingsList as unknown as ISpending[]
 
-    
+    /*
     const Test = ({arr} : any) => (
         <>
           {arr.map((el: any) => (
@@ -47,25 +48,64 @@ const Home = () => {
           ))}
         </>
       );
-
+*/
     let listItems = null
     if (arr !== null) {
 
         listItems = arr.map((item) => (
             <Fragment key={item._id as Key}>
+                {/*}
                 <li>
-                    {/* Passing unique value to 'key' prop, eases process for virtual DOM to remove specific element and update HTML tree  */}
                     <span>amount : {item.amount} </span>
                     <span>type: {item.type}</span>
                     <span>comment: {item.comments} </span>
                     <span>date: {item.date.toLocaleString()} </span>
                     <span><img src={String(item.image)} width="300" height="300" alt=" "></img></span>
                 </li>
+                {*/}
+                <div className="spending-element">        
+            
+                    <tr>
+                        <td>
+                            <div className="element-amount">
+                                {item.amount}
+                            </div>
+                        </td>
+                        <td>
+                            <div className="element-header">
+                                {item.type}
+                            </div>
+                        </td>
+                        <td>
+                            <form name="element-form" method="post" id="delete-form" encType="multipart/form-data">
+                                <input type="hidden" name="_id" value={item._id} />
+                                <input type="hidden" name="image" value={(item.image !== null) ? String(item.image)  : '' } />
+                                <input type="submit" value="Delete"/>
+                            </form>
+                        </td>
+                    </tr>
+                    <tr>
+                    <div id="element-date" className="element-header">
+                        {item.date.toLocaleString()}    
+                    </div>
+                    </tr>
+                
+                    <tr>
+                    <br></br>
+                    <div className="element-comment">
+                        <img src={String(item.image)} width="300" height="300" alt=" "></img>
+                        <br></br>
+                        {item.comments}
+                    </div>
+                    </tr>
+                </div>
+
             </Fragment>
         ));
     }
 
-
+    // TODO fix all the margins
+    // TODO fix null images
     
     return(
         <div>
@@ -77,8 +117,11 @@ const Home = () => {
                 <li><Link to='/add'>add</Link></li>
                 <li><Link to='/limits'>limits</Link></li>
             </nav>
-            {!listItems ?'sadly null :(' :  listItems}
+            <table className='tableWrapper'>
+                {!listItems ?'sadly null :(' :  listItems}
+            </table>
         </div>
+        
 
     )
       /*
