@@ -153,8 +153,8 @@ const Home = () => {
 
             <div className="spending-element-margins" >
                 <div className="add-new-element">
-                    <a href="/add"><button className="add-button">ADD NEW SPENDINGS</button></a>
-                    <a href="/limits"><button id="limits-button" className="add-button">CHANGE LIMITS</button></a>
+                    <Link to="/add"><button className="add-button">ADD NEW SPENDINGS</button></Link>
+                    <Link to="/limits"><button id="limits-button" className="add-button">CHANGE LIMITS</button></Link>
                 </div>
             </div>
 

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import RegisterPage from './register/register';
 import LoginPage from './login/login';
 import { Box } from '@mui/material';
@@ -19,6 +19,7 @@ const AuthRootComponent = () => {
 
     return(
         <div className='root'>
+            <Link to="/">HOME</Link>
             <form className="form" onSubmit={handleSubmit}>
                 <Box
                     display='flex'

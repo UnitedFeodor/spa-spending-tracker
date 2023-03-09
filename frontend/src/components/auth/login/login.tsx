@@ -1,5 +1,6 @@
-import { Button, Link, TextField, Typography } from '@mui/material';
+import { Button, TextField, Typography } from '@mui/material';
 import React, { Fragment } from 'react';
+import { Link } from 'react-router-dom';
 
 const LoginPage = (props: any) => {
     const{setEmail,setPassword} = props
@@ -12,7 +13,9 @@ const LoginPage = (props: any) => {
             <TextField type="password" fullWidth={true} margin='normal' label="Password" variant="outlined" placeholder='Enter your password'
                 onChange={(e) => {setPassword(e.target.value)}}/>    
             <Button type="submit" variant="contained" sx={{marginTop: 3}}>Sign In</Button>
-            <Typography variant="body1" padding={3}>No account?<span className="incitingText">Register</span></Typography>
+            <Typography variant="body1" padding={3}>No account?
+            <Link to="/register" > <span className="incitingText">Register</span> </Link>
+            </Typography>
                 
         </>
     );
