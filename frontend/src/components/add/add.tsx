@@ -9,7 +9,7 @@ const AddPage = () => {
    const handleSubmit = (event : any) => {
         console.log('add handleSubmit ran');
         event.preventDefault();
-        // TODO form add file
+        
         const fileToUpload = event.target.filedata.files[0]//event.target.filedata.value
         console.log(fileToUpload)
         let form = new FormData();

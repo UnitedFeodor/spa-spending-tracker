@@ -140,7 +140,7 @@ function dineroLimitsToFormat(limitsObj) {
 }
 
 function chooseLimitFuncByInput(inputNum,amount,month,year){
-    //console.log("chooseLimitFuncByInput")
+    console.log("chooseLimitFuncByInput")
     //console.log(amount.getAmount(),"is dailyLimit;",month,"is month;", year,"is year")
     const functionsLimits = {
         0: setLimitsFromDaily,
@@ -190,7 +190,7 @@ function getAllLimitsChecks(limits,spendingsList) {
 
 function getFullLimitsInfo(limits,spendingsList) {
     const totalSpendings = calculateTotalSpendings(spendingsList).toFormat('$0.00')
-    
+    //console.log("getFullLimitsInfo limits: ",limits)
     return fullLimitsInfo = {
         limits: dineroLimitsToFormat(limits),
         checks: getAllLimitsChecks(limits, spendingsList),

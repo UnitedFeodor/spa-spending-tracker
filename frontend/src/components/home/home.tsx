@@ -13,7 +13,9 @@ const Home = () => {
 
     useEffect(() => {
         const apiUrl = '/api/spendings';
-        axios.get(apiUrl).then((resp) => {
+        axios.get(apiUrl,{
+            withCredentials: true,
+          }).then((resp) => {
             console.log("get.then in useEffect")
             const data = resp.data;
             console.log("resp.data is ",resp.data);

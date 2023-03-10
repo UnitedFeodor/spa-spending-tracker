@@ -19,19 +19,17 @@ var list = [
     { _id: "3",amount: Dinero({amount: 300,currency: 'USD'}), type: "coke", comments: "mmm delicious" , date: new Date(), image: null }
     ]; 
 
-let dailyLimit = Dinero({amount: 100000,currency: 'USD'});
-let limits = helper.setLimitsFromDaily(dailyLimit,3,2023)
+let dailyLimit = Dinero({amount: 10000,currency: 'USD'});
+let limits = { limits: helper.setLimitsFromDaily(dailyLimit,3,2023) } 
+
 
 let params = {
     list,
-    limits, 
-    helper
+    limits
 }
-params.helper = helper
-function addNewSpending(amount,type,comments,date,image) {
-    let entry = {amount,type,comments,date,image}
-    params.list.push(entry)
-}
+let limitsObjects = helper.setLimitsFromDaily(dailyLimit,3,2023)
+
+
 function formNewSpending(amount,type,comments,date,image) {
     let entry = {amount,type,comments,date,image}
     return entry
@@ -45,7 +43,7 @@ function formNewSpendingWithId(_id,amount,type,comments,date,image) {
 
 
 router.get('/spendings', async (req,res) => {
-    console.log("get /")
+    console.log("get /spendings")
     const dbPosts = await postModel.find({})
 
     //console.log("dbPosts",dbPosts)
@@ -67,7 +65,9 @@ router.get('/spendings', async (req,res) => {
 
     params.list = listToShow
 
-    params.limits = helper.getFullLimitsInfo(limits,dineroList)
+    //console.log("get /spendings params.limits.limits before",params.limits.limits)
+    params.limits = helper.getFullLimitsInfo(limitsObjects,dineroList)
+    //console.log("get /spendings params.limits.limits after",params.limits.limits)
 
     res.json(params)
 })
@@ -157,7 +157,7 @@ router.post('/add', async (req,res) => {
 router.get('/limits',(req,res) => {
     console.log("get /limits")
      
-    res.render('limits', params)
+    res.json(helper.dineroToFormattedNumberUSD(limitsObjects.dailyLimit))
 })
 
 router.post('/limits',(req,res) => {
@@ -168,8 +168,14 @@ router.post('/limits',(req,res) => {
     console.log(limitType)
     const currDate = new Date()
     const newLimits = helper.chooseLimitFuncByInput(limitType,amount,currDate.getMonth()+1,currDate.getFullYear())
-    params.limits = newLimits
-    res.redirect('/')
+    console.log(newLimits)
+    limitsObjects = newLimits
+    try {
+        res.send("OK")
+        //res.redirect('/')
+    } catch (error) {
+        response.status(500).send(error);
+    }
 })
 
 /*
