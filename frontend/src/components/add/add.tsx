@@ -9,17 +9,20 @@ const AddPage = () => {
    const handleSubmit = (event : any) => {
         console.log('add handleSubmit ran');
         event.preventDefault();
-        
-        
-        axios.postForm('/api/add', {
-            amount: event.target.amount.value,
-            type:  event.target.type.value,
-            comments:  event.target.comments.value,
-            filedata:  event.target.filedata.value,
+        // TODO form add file
+        const fileToUpload = event.target.filedata.files[0]//event.target.filedata.value
+        console.log(fileToUpload)
+        let form = new FormData();
+        form.set('filedata',fileToUpload)
+        form.set('amount',event.target.amount.value)
+        form.set('type',event.target.type.value)
+        form.set('comments',event.target.comments.value)
+        axios.postForm('/api/add', form, {
+            headers: {
+             'content-type': 'multipart/form-data' // do not forget this 
+            }
         }).then((res) => {
             navigate("/")
-
-        
         }).catch(function (error) {
             if (error.response) {
             // The request was made and the server responded with a status code

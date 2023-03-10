@@ -48,7 +48,7 @@ router.get('/spendings', async (req,res) => {
     console.log("get /")
     const dbPosts = await postModel.find({})
 
-    console.log("dbPosts",dbPosts)
+    //console.log("dbPosts",dbPosts)
     let listToShow = []
     let dineroList = []
     dbPosts.forEach(element => {
@@ -72,8 +72,43 @@ router.get('/spendings', async (req,res) => {
     res.json(params)
 })
 
+router.delete('/spendings/:id', async (req,res) => { // delete
+    console.log("delete /",req.params.id)
 
-router.post('/spendings', async (req,res) => { // delete
+    const _id = new mongoose.Types.ObjectId(req.params.id)
+    let image
+    try {
+        image = await postModel.findByID(_id).image // TODO may be wrong
+        //console.log(await postModel.countDocuments(_id))// 1
+    } catch (error) {
+        res.status(500).send(error);
+    }
+
+    
+    console.log("image value is:",image)
+    if (image !== null && image !=='' && image !==' ') {
+        console.log("image not null and not empty!!!")
+        const filePath = path.join(__dirname,'..',image) 
+        console.log(filePath)
+        fs.unlinkSync(filePath)
+    }
+
+   
+    try {
+        await postModel.deleteOne(_id)  
+        //await postModel.findByID(_id)
+        console.log(await postModel.countDocuments(_id))// 0
+        res.send("OK")
+        //res.redirect("/")
+    } catch (error) {
+        res.status(500).send(error);
+    }
+
+
+})
+
+
+router.post('/spendings', async (req,res) => { // TODO delete
     console.log("post /")
 
     const _id = new mongoose.Types.ObjectId(req.body._id)
@@ -106,18 +141,19 @@ router.get('/add',(req,res) => {
     res.render('add', params)
 })
 
+
 router.post('/add', async (req,res) => {
     console.log("post /add")
     console.log(req.body.amount + " = req body amount")
 
     const amount = helper.parseUSDFromFormattedString(req.body.amount)
-    console.log(amount.getAmount() + amount.getCurrency())
+    //console.log(amount.getAmount() + amount.getCurrency())
     const spendingType = req.body.type;
-    console.log(spendingType) 
+    //console.log(spendingType) 
     const comments = req.body.comments;
-    console.log(comments)
+    //console.log(comments)
     const date = new Date()
-    console.log("date " + date)
+    //console.log("date " + date)
 
     let filedata = req.file;
     console.log("filedata",filedata);
@@ -125,7 +161,7 @@ router.post('/add', async (req,res) => {
         filedata = null
     } else {
         console.log(filedata.path);
-        filedata =filedata.path
+        filedata = filedata.path
     }
         
     //addNewSpending(amount, spendingType, comments, date, filedata)

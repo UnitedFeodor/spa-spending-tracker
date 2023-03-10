@@ -42,7 +42,7 @@ function dineroToFormatWrapperUSD(amount) {
 }
 
 function calculateTotalSpendings(spendingsList) {
-    console.log("calculateTotalSpendings")
+    //console.log("calculateTotalSpendings")
     let result = Dinero({amount: 0, currency: 'USD'})
     spendingsList.forEach(element => {
         
@@ -58,11 +58,11 @@ function dineroInvertSign(dineroNum) {
 }
 
 function checkLimit(currentSpendings, limit) {
-    console.log("checkLimit")
+    //console.log("checkLimit")
     let exceeding = currentSpendings.subtract(limit)
-    console.log("current cents = ", currentSpendings.getAmount())
-    console.log("limit cents = ", limit.getAmount())
-    console.log("exceeding cents = ", exceeding.getAmount())
+    //console.log("current cents = ", currentSpendings.getAmount())
+    //console.log("limit cents = ", limit.getAmount())
+    //console.log("exceeding cents = ", exceeding.getAmount())
     let exceedingBelowStr;
     if (exceeding.lessThan(Dinero({ amount: 0 }))) {
         exceeding = dineroInvertSign(exceeding)
@@ -82,8 +82,8 @@ function checkLimit(currentSpendings, limit) {
 
  
 function setLimitsFromDaily(dailyLimit, month, year) {  // year and month are integers
-    console.log("setLimitsFromDaily")
-    console.log(dailyLimit.getAmount(),"is dailyLimit;",month,"is month;", year,"is year")
+    //console.log("setLimitsFromDaily")
+    //console.log(dailyLimit.getAmount(),"is dailyLimit;",month,"is month;", year,"is year")
     return limits = {
         dailyLimit: dailyLimit,
         weeklyLimit: dailyLimit.multiply(7),
@@ -92,7 +92,7 @@ function setLimitsFromDaily(dailyLimit, month, year) {  // year and month are in
     }
 }
 function setLimitsFromWeekly(weeklyLimit,month,year) {
-    console.log("setLimitsFromMonthly")
+    //console.log("setLimitsFromMonthly")
     return limits = {
         dailyLimit: weeklyLimit.divide(7),
         weeklyLimit:  weeklyLimit,
@@ -102,7 +102,7 @@ function setLimitsFromWeekly(weeklyLimit,month,year) {
 }
 
 function setLimitsFromMonthly(monthlyLimit,month,year) {
-    console.log("setLimitsFromMonthly")
+    //console.log("setLimitsFromMonthly")
     return limits = {
         dailyLimit: monthlyLimit.divide(daysInMonth(month, year)),
         weeklyLimit:  monthlyLimit.divide(daysInMonth(month, year)).multiply(7),
@@ -112,7 +112,7 @@ function setLimitsFromMonthly(monthlyLimit,month,year) {
 }
 
 function setLimitsFromYearly(yearlyLimit,month,year) {
-    console.log("setLimitsFromMonthly")
+    //console.log("setLimitsFromMonthly")
     return limits = {
         dailyLimit: yearlyLimit.divide(12).divide(daysInMonth(month, year)),
         weeklyLimit:  yearlyLimit.divide(12).divide(daysInMonth(month, year)).multiply(7),
@@ -140,8 +140,8 @@ function dineroLimitsToFormat(limitsObj) {
 }
 
 function chooseLimitFuncByInput(inputNum,amount,month,year){
-    console.log("chooseLimitFuncByInput")
-    console.log(amount.getAmount(),"is dailyLimit;",month,"is month;", year,"is year")
+    //console.log("chooseLimitFuncByInput")
+    //console.log(amount.getAmount(),"is dailyLimit;",month,"is month;", year,"is year")
     const functionsLimits = {
         0: setLimitsFromDaily,
         1: setLimitsFromWeekly,
@@ -149,7 +149,7 @@ function chooseLimitFuncByInput(inputNum,amount,month,year){
         3: setLimitsFromYearly
     }
     const func = functionsLimits[inputNum]
-    console.log("func is",func)
+    //console.log("func is",func)
     return functionsLimits[inputNum](amount,month,year)
 
 }
