@@ -27,11 +27,14 @@ const Home = () => {
     const handleSubmit = (event : any) => {
         console.log('handleSubmit ran');
         event.preventDefault();
-        
-        axios.postForm('/api/spendings', {
+        /**
+         * axios.postForm('/api/spendings', {
             _id: event.target._id.value,
             image:  event.target.image.value,
-        }).then((res) => {
+        })
+         */
+        
+        axios.delete(`/api/spendings/${event.target._id.value}`).then((res) => {
             console.log("postForm.then")
             const apiUrl = '/api/spendings';
             axios.get(apiUrl).then((resp) => {
