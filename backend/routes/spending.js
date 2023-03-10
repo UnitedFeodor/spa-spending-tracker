@@ -72,47 +72,21 @@ router.get('/spendings', async (req,res) => {
     res.json(params)
 })
 
-router.delete('/spendings/:id', async (req,res) => { // delete
+router.delete('/spendings/:id', async (req,res) => { 
     console.log("delete /",req.params.id)
 
     const _id = new mongoose.Types.ObjectId(req.params.id)
-    let image
+    let dbPost
     try {
-        image = await postModel.findByID(_id).image // TODO may be wrong
+        dbPost = await postModel.findById(_id)
+        console.log("dbPsot",dbPost)
         //console.log(await postModel.countDocuments(_id))// 1
     } catch (error) {
+        console.log(error)
         res.status(500).send(error);
     }
 
-    
-    console.log("image value is:",image)
-    if (image !== null && image !=='' && image !==' ') {
-        console.log("image not null and not empty!!!")
-        const filePath = path.join(__dirname,'..',image) 
-        console.log(filePath)
-        fs.unlinkSync(filePath)
-    }
-
-   
-    try {
-        await postModel.deleteOne(_id)  
-        //await postModel.findByID(_id)
-        console.log(await postModel.countDocuments(_id))// 0
-        res.send("OK")
-        //res.redirect("/")
-    } catch (error) {
-        res.status(500).send(error);
-    }
-
-
-})
-
-
-router.post('/spendings', async (req,res) => { // TODO delete
-    console.log("post /")
-
-    const _id = new mongoose.Types.ObjectId(req.body._id)
-    const image = req.body.image
+    let image = dbPost.image    
     console.log("image value is:",image)
     if (image !== null && image !=='' && image !==' ') {
         console.log("image not null and not empty!!!")
