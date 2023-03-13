@@ -206,39 +206,33 @@ const Home = () => {
     console.log("listItems is ", listItems)
     return(
         <div>
-            <h1> this is the home page</h1>
-            <nav>
-                <li><Link to='/'>home</Link></li>
-                <li><Link to='/login'>login</Link></li>
-                <li><Link to='/register'>register</Link></li>
-                <li><Link to='/add'>add</Link></li>
-                <li><Link to='/limits'>limits</Link></li>
-            </nav>
-
-            <div>
+            <Box
+                justifyContent='center'
+                alignItems='center'
+                alignContent='center'
+                display='flex'
+                flexDirection='column'
+            >
+                <Typography variant='h2' sx={{alignSelf: 'center'}}>SPENDINGS TRACKER</Typography>
+                <Button variant='text'><Link to="/login">LOGIN</Link></Button>
+                <Button variant='text'><Link to="/register">REGISTER</Link></Button>
+            </Box>
+                    
             
                 {!limitsPanel ?'Loading limits...' :  limitsPanel}
-            </div>
-            
 
-            <div>
-                <div className="spending-element-margins" >
-                    <Box
-                        justifyContent='center'
-                        alignItems='center'
-                        alignContent='center'
-                        display='flex'
-                    >
-                        <Button variant='text'><Link to="/add">ADD NEW SPENDINGS</Link></Button>
-                        <Button variant='text'><Link to="/limits">CHANGE LIMITS</Link></Button>
-                    </Box>
-                </div>
-            </div>
-            
-            <div >
-            
-                    {!listItems ?'Loading spendings...' :  listItems}
-            </div>
+                <Box
+                    justifyContent='center'
+                    alignItems='center'
+                    alignContent='center'
+                    display='flex'
+                >
+                    <Button variant='text'><Link to="/add">ADD NEW SPENDINGS</Link></Button>
+                    <Button variant='text'><Link to="/limits">CHANGE LIMITS</Link></Button>
+                </Box>
+        
+        
+                {!listItems ?'Loading spendings...' :  listItems}
             
         </div>
     )

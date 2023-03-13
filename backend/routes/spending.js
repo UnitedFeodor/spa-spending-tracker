@@ -100,7 +100,7 @@ router.delete('/spendings/:id', async (req,res) => {
         await postModel.deleteOne(_id)  
         //await postModel.findByID(_id)
         console.log(await postModel.countDocuments(_id))// 0
-        res.send("OK")
+        res.status(200).send("OK")
         //res.redirect("/")
     } catch (error) {
         res.status(500).send(error);
@@ -111,8 +111,8 @@ router.delete('/spendings/:id', async (req,res) => {
 
 router.get('/add',(req,res) => {
     console.log("get /add")
-     
-    res.render('add', params)
+    res.status(200).send("OK") 
+    //res.render('add', params)
 })
 
 
@@ -145,10 +145,10 @@ router.post('/add', async (req,res) => {
     //post.markModified('amount')
     try {
         await post.save();
-        res.send("OK")
+        res.status(200).send("OK")
         //res.redirect('/')
     } catch (error) {
-        response.status(500).send(error);
+        res.status(500).send(error);
     }
 
     
@@ -171,10 +171,10 @@ router.post('/limits',(req,res) => {
     console.log(newLimits)
     limitsObjects = newLimits
     try {
-        res.send("OK")
+        res.status(200).send("OK")
         //res.redirect('/')
     } catch (error) {
-        response.status(500).send(error);
+        res.status(500).send(error);
     }
 })
 
