@@ -78,11 +78,11 @@ const AddPage = () => {
                 variant="outlined" />
 
 
-                <input type="file" name="filedata"/>
+                <input type="file" name="filedata"/> 
+                <br></br>
             
-
-                <Button type="submit" variant="contained" sx={{margin: 3}}>SAVE</Button>
-                <Button variant="text" sx={{margin: 3}}><Link to="/">CANCEL</Link></Button>
+                <Button type="submit" variant="contained" sx={{margin: 3, alignSelf:'center'}}>SAVE</Button>
+                <Button variant="text" sx={{margin: 3, alignSelf:'center'}}><Link to="/">CANCEL</Link></Button>
                 
         </form>
     </Box>

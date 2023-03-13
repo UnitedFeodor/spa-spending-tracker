@@ -193,7 +193,7 @@ const Home = () => {
                                 <form name="element-form" method="post" id="delete-form" encType="multipart/form-data" action="/api/spendings" onSubmit={handleSubmit}>
                                     <input type="hidden" name="_id" value={String(item._id)} />
                                     <input type="hidden" name="image" value={(item.image !== null) ? String(item.image)  : '' } />
-                                    <Button type="submit" value="Delete" variant="text">Delete</Button>
+                                    <Button type="submit" value="Delete" variant="text" sx={{marginRight: 'auto'}}>Delete</Button>
                                 </form>
                             </CardActionArea>
                         </Card>    

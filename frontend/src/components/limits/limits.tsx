@@ -1,13 +1,19 @@
-import { TextField } from '@mui/material';
+import { Box, Button, MenuItem, Select, SelectChangeEvent, TextField, Typography } from '@mui/material';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 const LimitsPage = () => {
 
     console.log("react component limits")
     const [limits,setLimits] = useState(null as any)
-    //let limits = null as any
+
+    const [type, setType] = React.useState('0');
+
+    const handleChange = (event: SelectChangeEvent) => {
+        setType(event.target.value);
+    };
+
     useEffect(() => {
         const apiUrl = '/api/limits';
         axios.get(apiUrl,{
@@ -54,31 +60,41 @@ const LimitsPage = () => {
     }
 
     return (
-        <form method="post" name="limitsForm" encType="multipart/form-data" onSubmit={handleSubmit}>
-        <div className="spending-element" id="limit-spending-element">        
+        <Box
+            display='flex'
+            justifyContent='center'
+            alignItems='center'
+            flexDirection='column'
+            maxWidth={900}
+            margin='auto'
+            padding={5}
+            borderRadius={5}
+            boxShadow={'5px 5px 10px #ccc'}
+        >
+            <Typography variant="h2"> Set new limits</Typography>
+            <form method="post" name="limitsForm" encType="multipart/form-data" onSubmit={handleSubmit}>
 
-            <div className="element-amount">
-                <TextField name='amount' fullWidth={true} margin='normal' label="Amount"
-                    variant="outlined" placeholder={ limits !== null ? limits : ""}
-                />
-            </div>
-            <div className="element-header">
-                <label> LIMIT TYPE </label>
-                <select className="limits-select" name="type" >
-                    <option value="0" selected>Daily</option>
-                    <option value="1">Weekly</option>
-                    <option value="2">Monthly</option>
-                    <option value="3">Yearly</option>
-                  </select>
-            
-            </div>
-            <br/><br/><br/>
-            <div /*style="display: block;"*/>
-                <input type="submit" value="SAVE"/>
-            </div>
-        </div>
-
-    </form>
+                    <TextField name='amount' fullWidth={true} margin='normal' label="Amount"
+                        variant="outlined" placeholder={ limits !== null ? limits : ""}/>
+                    <Typography display="inline" variant="body1" sx={{marginRight: 3}}>LIMIT TYPE </Typography>
+                    <Select 
+                        sx={{minWidth: 150, maxHeight: 40}} 
+                        name="type" 
+                        label="Type" 
+                        value={type}
+                        onChange={handleChange}
+                         >
+                        <MenuItem  value="0" selected>Daily</MenuItem >
+                        <MenuItem  value="1">Weekly</MenuItem >
+                        <MenuItem  value="2">Monthly</MenuItem >
+                        <MenuItem  value="3">Yearly</MenuItem >
+                    </Select>
+                    <br></br>
+                
+                    <Button type="submit" variant="contained" sx={{margin: 3, alignSelf:'center'}}>SAVE</Button>
+                    <Button variant="text" sx={{margin: 3, alignSelf:'center'}}><Link to="/">CANCEL</Link></Button>
+        </form>
+    </Box>
     );
 };
 
