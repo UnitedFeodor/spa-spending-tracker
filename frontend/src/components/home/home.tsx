@@ -161,7 +161,7 @@ const Home = () => {
             >
                 <Fragment key={item._id as Key} 
 >
-                        <Card sx={{ minWidth: 900,backgroundColor: "white" }}>
+                        <Card sx={{ width: 900,backgroundColor: "white",whiteSpace: 'pre-wrap' }}>
                             <CardHeader 
                                 sx ={{ backgroundColor: "whitesmoke"}}
                                 title={<Typography variant="h4"> {'$' + item.amount}</Typography> } 
@@ -203,8 +203,6 @@ const Home = () => {
         ));
     }
 
-    // TODO fix all the margins
-    // TODO fix null images
     console.log("listItems is ", listItems)
     return(
         <div>
