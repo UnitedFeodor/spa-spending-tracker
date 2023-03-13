@@ -3,6 +3,7 @@ import React, { Fragment, Key, useEffect, useReducer, useState } from 'react'
 import { Link } from 'react-router-dom'
 import './style.css'
 import  Dinero from "dinero.js";
+import { Box, Button, Card, CardActionArea, CardContent, CardHeader, CardMedia, Grid, Paper, Typography, styled } from '@mui/material';
 
 const Home = () => {
     const [spendingsList,setSpendingsList] = useState(null)
@@ -91,87 +92,114 @@ const Home = () => {
         monthlyLimit: Dinero.Dinero;
         yearlyLimit: Dinero.Dinero;
     }
+
+    const Item = styled(Paper)(({ theme }) => ({
+        backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
+        ...theme.typography.body2,
+        paddingLeft: 15,
+        paddingRight: 15,
+        margin: 15,
+        minHeight: 20,
+        paddingBlock: 15,
+        textAlign: 'center',
+        alignContent: 'center',
+        alignSelf: 'center',
+        color: theme.palette.text.secondary
+      }));
+      
     
     const spendingsArray: ISpending[] = spendingsList as unknown as ISpending[]
     const limitsObj: ILimits = limits as unknown as ILimits 
     let limitsPanel = null
     if(limitsObj !== null) {
-        limitsPanel = <Fragment>
-                <div className="limits-info" >
-                    <div className="all-limits">
-                        <div>Daily Limit:{limits.limits.dailyLimit} </div>
-                        <div>Weekly Limit:{limits.limits.weeklyLimit}</div>
-                        <div>Monthly Limit:{limits.limits.monthlyLimit} </div>
-                        <div>Yearly Limit:{limits.limits.yearlyLimit} </div>   
-                    </div>
-
-                    <div className="all-limits" id="spendings">
-                        <div>    
-                            Spent in total: {limits.total}</div>
-                        <div>{limits.checks.exceedingDaily}</div>
-                    </div>
-                </div>
-            
+        limitsPanel = 
+        <Box
+            display='flex'
+            justifyContent='center'
+            alignItems='center'
+            //flexDirection='column'
+            margin='auto'
+        >
+            <Fragment>
+                <Box>
+                    <Grid container spacing={1}>
+                        <Item>
+                            <Typography variant='body1'>
+                                Daily Limit:{limits.limits.dailyLimit}<br/> 
+                                {limits.checks.exceedingDaily}
+                            </Typography>
+                        </Item>
+                        <Item><Typography variant='body1'> Weekly Limit:{limits.limits.weeklyLimit}<br/> {limits.checks.exceedingWeekly}
+                        </Typography></Item>
+                        <Item><Typography variant='body1'>Monthly Limit:{limits.limits.monthlyLimit} <br/>{limits.checks.exceedingMonthly} 
+                        </Typography></Item>
+                        <Item><Typography variant='body1'>Yearly Limit:{limits.limits.yearlyLimit}<br/> {limits.checks.exceedingYearly}
+                        </Typography></Item>  
+                    </Grid>
+                    <Item><Typography variant='h4'> Spent in total: {limits.total} </Typography></Item>
+                    
+                
+                </Box>
+                
             </Fragment>
+        </Box>
 
     }
-
-    /*
-    const Test = ({spendingsArray} : any) => (
-        <>
-          {spendingsArray.map((el: any) => (
-            <div key={el.type} className='element'>{el.type}</div>
-          ))}
-        </>
-      );
-*/
 
     let listItems = null
     if (spendingsArray !== null) {
 
         listItems = spendingsArray.map((item) => (
-            <Fragment key={item._id as Key}>
-                {/*}
-                <li>
-                    <span>amount : {item.amount} </span>
-                    <span>type: {item.type}</span>
-                    <span>comment: {item.comments} </span>
-                    <span>date: {item.date.toLocaleString()} </span>
-                    <span><img src={String(item.image)} width="300" height="300" alt=" "></img></span>
-                </li>
-                {*/}
-                <div className="spending-element">        
-                    <tr>
-                        <td>
-                        <div className="element-amount">{item.amount}</div>
-                        </td>
-                        <td>
-                            <div className="element-header">{item.type}</div>
-                        </td>
-                        <td>
-                            <form name="element-form" method="post" id="delete-form" encType="multipart/form-data" action="/api/spendings" onSubmit={handleSubmit}>
-                                <input type="hidden" name="_id" value={String(item._id)} />
-                                <input type="hidden" name="image" value={(item.image !== null) ? String(item.image)  : '' } />
-                                <input type="submit" value="Delete"/>
-                            </form>
-                        </td>
-                    </tr>
-                    <tr >
-                        <div id="element-date" className="element-header">
-                            {new Date(item.date).toLocaleDateString()}   
-                        </div> 
-                    </tr>
-                
-                    <tr >
-                        <div className="element-comment">
-                            <img src={String(item.image)} width="300" height="300" alt=" "></img>
-                            <br></br>
-                            {item.comments}
-                        </div>
-                    </tr>
-                </div>
+            <Box 
+                display='flex'
+                justifyContent='center'
+                alignItems='center'
+                flexDirection='column'
+                minWidth={640}
+                margin={1}
+                padding={1}
+            >
+                <Fragment key={item._id as Key} 
+>
+                        <Card sx={{ minWidth: 900,backgroundColor: "white" }}>
+                            <CardHeader 
+                                sx ={{ backgroundColor: "whitesmoke"}}
+                                title={<Typography variant="h4"> {'$' + item.amount}</Typography> } 
+                                
+                                subheader={<Typography variant="h5">{item.type} 
+                                        <Typography variant="body1"> 
+                                            {new Date(item.date).toLocaleDateString()+" "+new Date(item.date).toLocaleTimeString()} 
+                                        </Typography>
+                                    </Typography>}
+                                >
+              
+                            </CardHeader>
+                            <CardContent>
+                                <Typography variant='body1'>
+                                    {item.comments}
+                                </Typography>
+                                
+                            </CardContent>
+                            <CardMedia  
+                                sx={{ maxWidth: 300, padding: "1em 1em 0 1em", objectFit: "contain" }}
+                                
+                                image={String(item.image)} 
+                                alt=""
+                                component="img" 
+                                >
+                                
+                            </CardMedia>
+                            <CardActionArea>
+                                <form name="element-form" method="post" id="delete-form" encType="multipart/form-data" action="/api/spendings" onSubmit={handleSubmit}>
+                                    <input type="hidden" name="_id" value={String(item._id)} />
+                                    <input type="hidden" name="image" value={(item.image !== null) ? String(item.image)  : '' } />
+                                    <Button type="submit" value="Delete" variant="text">Delete</Button>
+                                </form>
+                            </CardActionArea>
+                        </Card>    
 
-            </Fragment>
+                </Fragment>
+            </Box>
         ));
     }
 
@@ -189,38 +217,32 @@ const Home = () => {
                 <li><Link to='/limits'>limits</Link></li>
             </nav>
 
-
-            {!limitsPanel ?'no limits :(' :  limitsPanel}
-
-
-            <div className="spending-element-margins" >
-                <div className="add-new-element">
-                    <Link to="/add"><button className="add-button">ADD NEW SPENDINGS</button></Link>
-                    <Link to="/limits"><button id="limits-button" className="add-button">CHANGE LIMITS</button></Link>
-                </div>
+            <div>
+            
+                {!limitsPanel ?'Loading limits...' :  limitsPanel}
             </div>
-
-            <table className='tableWrapper'>
-                {!listItems ?'no spendigns :(' :  listItems}
-            </table>
-        </div>
-    )
-      /*
-    return (
-        <div> 
-            <h1> this is the home page</h1>
-            <nav>
-                <li><Link to='/'>home</Link></li>
-                <li><Link to='/login'>login</Link></li>
-                <li><Link to='/register'>register</Link></li>
-                <li><Link to='/add'>add</Link></li>
-                <li><Link to='/limits'>limits</Link></li>
-            </nav>
-            { !spendingsArray ?'sadly null :(' : <Test spendingsArray={spendingsArray}/>}
             
 
+            <div>
+                <div className="spending-element-margins" >
+                    <Box
+                        justifyContent='center'
+                        alignItems='center'
+                        alignContent='center'
+                        display='flex'
+                    >
+                        <Button variant='text'><Link to="/add">ADD NEW SPENDINGS</Link></Button>
+                        <Button variant='text'><Link to="/limits">CHANGE LIMITS</Link></Button>
+                    </Box>
+                </div>
+            </div>
+            
+            <div >
+            
+                    {!listItems ?'Loading spendings...' :  listItems}
+            </div>
+            
         </div>
     )
-    */
 }
 export default Home

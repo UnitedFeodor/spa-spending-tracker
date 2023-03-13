@@ -1,8 +1,30 @@
-.tableWrapper {
-    margin: 0px;
-    align-self: center;
+
+/*
+.root {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     width: 100%;
 }
+
+.root > .form {
+    width: 80%;
+}
+*/
+.incitingText {
+    cursor: pointer;
+    margin-left: 10px;
+    color: cornflowerblue;
+}
+
+.all-limits > td {
+    margin: auto;
+    padding: 5;
+    border-radius: 5;
+    box-shadow:'5px 5px 10px #ccc';
+}
+
+/*
 
 .limits-info {
     background-color: darkolivegreen;
@@ -122,8 +144,7 @@ button:hover {
 
 .spending-element-margins {
     margin: auto;
-    /*width: 50%;
-    */
+
     overflow: auto;
     border: 0px solid wheat;
     margin-bottom: 10px;
@@ -133,9 +154,7 @@ button:hover {
 .spending-element {
     position: relative;
     margin: auto;
-    /*
-    width: 50%;
-    */
+
     border: 3px solid wheat;
     background-color: brown;
     -webkit-text-fill-color: wheat;
@@ -176,21 +195,7 @@ button:hover {
     white-space: nowrap;
     text-align:right;
 }
-/*
-.spending-element > .element-header{
 
-    float: left;
-    width: fit-content;
-    
-}
-
-.spending-element > .element-amount {
-    
-    float: left;
-    width:auto;
-
-}
-*/
 
 .element-header {
     margin-left: 10px;
@@ -216,3 +221,4 @@ img {
     max-width: 100%; 
     height: auto;
 }
+*/
