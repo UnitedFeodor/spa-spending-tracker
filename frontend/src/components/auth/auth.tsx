@@ -2,8 +2,9 @@ import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import RegisterPage from './register/register';
 import LoginPage from './login/login';
-import { Box } from '@mui/material';
+import { Box, Button } from '@mui/material';
 import './style.css'
+import { alignProperty } from '@mui/material/styles/cssUtils';
 
 const AuthRootComponent = () => {
     const [email,setEmail] = useState('')
@@ -18,9 +19,8 @@ const AuthRootComponent = () => {
     }
 
     return(
-        <div className='root'>
-            <Link to="/">HOME</Link>
-            <form className="form" onSubmit={handleSubmit}>
+        <div>
+            <form onSubmit={handleSubmit}>
                 <Box
                     display='flex'
                     justifyContent='center'
@@ -32,8 +32,10 @@ const AuthRootComponent = () => {
                     borderRadius={5}
                     boxShadow={'5px 5px 10px #ccc'}
                 >
+                    <Button variant="text" sx={{marginRight: 'auto'}}><Link to="/">HOME</Link></Button>
                     {location.pathname === '/login' ? <LoginPage setEmail={setEmail} setPassword={setPassword}/> : 
                         location.pathname === '/register' ? <RegisterPage setEmail={setEmail} setPassword={setPassword}/> : null}
+                    
                 </Box>
                 
             </form>

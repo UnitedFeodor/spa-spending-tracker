@@ -58,10 +58,6 @@ const LimitsPage = () => {
         <div className="spending-element" id="limit-spending-element">        
 
             <div className="element-amount">
-                <label> AMOUNT </label>
-                {/*}
-                <input type="text" name="amount"  value={ limits !== null ? limits : ""} />
-                {*/}
                 <TextField name='amount' fullWidth={true} margin='normal' label="Amount"
                     variant="outlined" placeholder={ limits !== null ? limits : ""}
                 />

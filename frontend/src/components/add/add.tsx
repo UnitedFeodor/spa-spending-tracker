@@ -1,6 +1,7 @@
+import { Box, Button, TextField, Typography } from '@mui/material';
 import axios from 'axios';
 import React from 'react';
-import { redirect, useNavigate } from 'react-router-dom';
+import { Link, redirect, useNavigate } from 'react-router-dom';
 
 const AddPage = () => {
     const navigate = useNavigate()
@@ -46,34 +47,45 @@ const AddPage = () => {
     }
 
     return (
-        <form name="addForm" method="post" action="/api/add" encType="multipart/form-data" onSubmit={handleSubmit}>
-        <div className="spending-element">        
+        <Box
+                    display='flex'
+                    justifyContent='center'
+                    alignItems='center'
+                    flexDirection='column'
+                    maxWidth={900}
+                    margin='auto'
+                    padding={5}
+                    borderRadius={5}
+                    boxShadow={'5px 5px 10px #ccc'}
+                >
+                    
+                    <Typography variant="h2"> Add a spending</Typography>
+            <form name="addForm" method="post" action="/api/add" encType="multipart/form-data" onSubmit={handleSubmit}>
 
-            <div className="element-amount">
-                <label> AMOUNT </label>
-                <input type="text" name="amount"/>
+                <TextField name='amount' fullWidth={true} margin='normal' label="Amount"
+                    variant="outlined" />
             
-            </div>
-            <div className="element-header">
-                <label> SPENDING TYPE </label>
-                <input type="text" name="type"/>
+                <TextField name='type' fullWidth={true} margin='normal' label="Type"
+                    variant="outlined" />
             
-            </div>
-            
-            <div className="element-comment">
-                <label> COMMENTS </label>
-                    <textarea name="comments"></textarea>
+        
+                <TextField name='comments' fullWidth={true} margin='normal' label="Comments"
+                white-space= 'pre-wrap'
+                sx={{width:900}}
+                multiline
+                rows={5}
+                maxRows={15}
+                variant="outlined" />
 
-            </div>
 
-            <div className="element-file">
                 <input type="file" name="filedata"/>
-            </div>
+            
 
-            <input type="submit" value="SAVE"/>
-        </div>
-
-    </form>
+                <Button type="submit" variant="contained" sx={{margin: 3}}>SAVE</Button>
+                <Button variant="text" sx={{margin: 3}}><Link to="/">CANCEL</Link></Button>
+                
+        </form>
+    </Box>
     );
 };
 

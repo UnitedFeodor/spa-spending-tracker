@@ -14,7 +14,7 @@ const LoginPage = (props: any) => {
                 onChange={(e) => {setPassword(e.target.value)}}/>    
             <Button type="submit" variant="contained" sx={{marginTop: 3}}>Sign In</Button>
             <Typography variant="body1" padding={3}>No account?
-            <Link to="/register" > <span className="incitingText">Register</span> </Link>
+            <Button variant="text"><Link to="/register">Register</Link></Button>
             </Typography>
                 
         </>

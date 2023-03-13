@@ -2,13 +2,11 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 90vw;
-    height: 70vw;
     
 }
 
 .root > .form {
-    width: 80%;
+    width: 900px;
 }
 
 .incitingText {

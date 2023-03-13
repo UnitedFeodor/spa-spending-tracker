@@ -14,7 +14,7 @@ const RegisterPage = (props: any) => {
                 onChange={(e) => {setPassword(e.target.value)}}/>    
             <Button variant="contained" sx={{marginTop: 3}}>Register</Button>
             <Typography variant="body1" padding={3}>Already have an account?
-                <Link to="/login" > <span className="incitingText">Sign In</span> </Link>
+                <Button variant="text"><Link to="/login">Sign In</Link></Button>
             </Typography>
 
         </Fragment>
