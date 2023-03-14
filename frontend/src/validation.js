@@ -1,4 +1,4 @@
-function validateSpendingForm(addForm) {
+export function validateSpendingForm(addForm) {
     console.log("validateSpendingForm")
     //let addForm = document.forms.addForm
     console.log("addform",addForm)
@@ -9,7 +9,7 @@ function validateSpendingForm(addForm) {
 }
 // TODO negative number and 0 check
 
-function validateLimitsForm(limitsForm) {
+export function validateLimitsForm(limitsForm) {
     console.log("validateLimitsForm")
     //let addForm = document.forms.limitsForm
     console.log("limitsForm",limitsForm)
