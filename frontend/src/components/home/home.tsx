@@ -9,7 +9,7 @@ const Home = () => {
     const [spendingsList,setSpendingsList] = useState(null)
     const [limits,setLimits] = useState(null as any)
 
-    const [ignored, forceUpdate] = useReducer(x => x + 1, 0);
+    //const [ignored, forceUpdate] = useReducer(x => x + 1, 0);
 
 
     useEffect(() => {
@@ -30,24 +30,18 @@ const Home = () => {
     const handleSubmit = (event : any) => {
         console.log('handleSubmit ran');
         event.preventDefault();
-        /**
-         * axios.postForm('/api/spendings', {
-            _id: event.target._id.value,
-            image:  event.target.image.value,
-        })
-         */
         
         axios.delete(`/api/spendings/${event.target._id.value}`).then((res) => {
-            console.log("postForm.then")
-            const apiUrl = '/api/spendings';
-            axios.get(apiUrl).then((resp) => {
-            console.log("get in post.then  ")
-            const data = resp.data;
-            console.log("resp.data is ",resp.data);
-            console.log("resp.data.list is ",resp.data.list);
-            setSpendingsList(data.list);
-            setLimits(data.limits)
-        });
+                console.log("postForm.then")
+                const apiUrl = '/api/spendings';
+                axios.get(apiUrl).then((resp) => {
+                console.log("get in post.then  ")
+                const data = resp.data;
+                console.log("resp.data is ",resp.data);
+                console.log("resp.data.list is ",resp.data.list);
+                setSpendingsList(data.list);
+                setLimits(data.limits)
+            });
         }).catch(function (error) {
             if (error.response) {
                 // The request was made and the server responded with a status code
@@ -71,7 +65,7 @@ const Home = () => {
         //"proxy": "http://localhost:3001"
 
         // eslint-disable-next-line react-hooks/rules-of-hooks
-        forceUpdate()
+        //forceUpdate()
     }
 
     console.log("spendingList is ",spendingsList)

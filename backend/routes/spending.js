@@ -160,8 +160,9 @@ router.get('/limits',(req,res) => {
     res.json(helper.dineroToFormattedNumberUSD(limitsObjects.dailyLimit))
 })
 
-router.post('/limits',(req,res) => {
-    console.log("post /limits")
+router.put('/limits',(req,res) => {
+    console.log("put /limits")
+    console.log(req.body)
     const amount = helper.parseUSDFromFormattedString(req.body.amount)
     console.log(amount.getAmount() + amount.getCurrency())
     const limitType = req.body.type;
