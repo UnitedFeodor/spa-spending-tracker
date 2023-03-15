@@ -5,6 +5,7 @@ import LoginPage from './login/login';
 import { Box, Button } from '@mui/material';
 import './style.css'
 import { alignProperty } from '@mui/material/styles/cssUtils';
+import axios from 'axios';
 
 const AuthRootComponent = () => {
     const [email,setEmail] = useState('')
@@ -14,7 +15,20 @@ const AuthRootComponent = () => {
 
     const handleSubmit = async (e: { preventDefault: () => void; }) => {
         e.preventDefault()
-        console.log(email)
+        console.log("email and password: ",email,password)
+        const userData ={
+            email,  
+            password
+        }
+        if (location.pathname === '/login') {
+            console.log("/login")
+            const user = await axios.post("/api/login",userData)
+            console.log(user.data)
+        } else if(location.pathname === '/register') {
+            console.log("/register")
+            const user = await axios.post("/api/register",userData)
+            console.log(user.data)
+        }
 
     }
 
@@ -33,8 +47,10 @@ const AuthRootComponent = () => {
                     boxShadow={'5px 5px 10px #ccc'}
                 >
                     <Button variant="text" sx={{marginRight: 'auto'}}><Link to="/">HOME</Link></Button>
-                    {location.pathname === '/login' ? <LoginPage setEmail={setEmail} setPassword={setPassword}/> : 
-                        location.pathname === '/register' ? <RegisterPage setEmail={setEmail} setPassword={setPassword}/> : null}
+                    {   location.pathname === '/login' ? 
+                            <LoginPage setEmail={setEmail} setPassword={setPassword}/> : 
+                        location.pathname === '/register' ? 
+                            <RegisterPage setEmail={setEmail} setPassword={setPassword}/> : null}
                     
                 </Box>
                 

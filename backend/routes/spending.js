@@ -3,6 +3,7 @@ const Dinero = require('dinero.js')
 const router = express.Router()
 const multer  = require("multer");
 const postModel = require("../model/post");
+const userModel = require("../model/user");
 const mongoose = require('mongoose')
 const fs = require('fs');
 const path = require('path');
@@ -79,7 +80,7 @@ router.delete('/spendings/:id', async (req,res) => {
     let dbPost
     try {
         dbPost = await postModel.findById(_id)
-        console.log("dbPsot",dbPost)
+        console.log("dbPost",dbPost)
         //console.log(await postModel.countDocuments(_id))// 1
     } catch (error) {
         console.log(error)
@@ -179,10 +180,43 @@ router.put('/limits',(req,res) => {
     }
 })
 
-/*
+router.post('/register', async (req,res) => {
+    console.log('post /register')
+    console.log(req.body)
+    const email = req.body.email
+    const password = req.body.password
+    
 
-router.get('/:id',(req,res) => {
-    res.send(`get page with id ${req.params.id}`)
+    let userData = {email,password,[mongoose.ObjectId]: []}
+
+    let dbUser = new userModel(userData)
+    try {
+        await dbUser.save();
+        res.status(200).send("OK")
+    } catch (error) {
+        res.status(500).send(error);
+    }
 })
-*/
+
+router.post('/login', async (req,res) => {
+    console.log('post /login')
+    console.log(req.body)
+    const email = req.body.email
+    const password = req.body.password
+    
+
+    let userData = {email,password}
+
+    let dbUser
+    try {
+        dbUser = await userModel.find(userData)
+        console.log("dbUser",dbUser)
+        res.send(dbUser)
+    } catch (error) {
+        console.log(error)
+        res.status(500).send(error);
+    }
+})
+
+
 module.exports = router

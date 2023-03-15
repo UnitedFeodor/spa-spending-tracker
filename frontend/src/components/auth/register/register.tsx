@@ -12,7 +12,8 @@ const RegisterPage = (props: any) => {
                 onChange={(e) => {setEmail(e.target.value)}}/>
             <TextField type="password" fullWidth={true} margin='normal' label="Password" variant="outlined" placeholder='Enter your password'
                 onChange={(e) => {setPassword(e.target.value)}}/>    
-            <Button variant="contained" sx={{marginTop: 3}}>Register</Button>
+            <Button type="submit" variant="contained" sx={{marginTop: 3}}>Register</Button>
+             
             <Typography variant="body1" padding={3}>Already have an account?
                 <Button variant="text"><Link to="/login">Sign In</Link></Button>
             </Typography>

@@ -3,7 +3,7 @@ import React, { Fragment } from 'react';
 import { Link } from 'react-router-dom';
 
 const LoginPage = (props: any) => {
-    const{setEmail,setPassword} = props
+    const {setEmail,setPassword} = props
 
     return (
         <>
@@ -13,8 +13,9 @@ const LoginPage = (props: any) => {
             <TextField type="password" fullWidth={true} margin='normal' label="Password" variant="outlined" placeholder='Enter your password'
                 onChange={(e) => {setPassword(e.target.value)}}/>    
             <Button type="submit" variant="contained" sx={{marginTop: 3}}>Sign In</Button>
+
             <Typography variant="body1" padding={3}>No account?
-            <Button variant="text"><Link to="/register">Register</Link></Button>
+                <Button variant="text"><Link to="/register">Register</Link></Button>
             </Typography>
                 
         </>
