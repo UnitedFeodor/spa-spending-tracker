@@ -42,8 +42,7 @@ const LimitsPage = () => {
             }, 
             {
                 headers: {
-                //'content-type': 'application/json' // do not forget this 
-                'content-type': 'multipart/form-data' 
+                'content-type': 'application/json' 
                 }
             }
             ).then((res) => {
