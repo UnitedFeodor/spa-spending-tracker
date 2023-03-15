@@ -186,32 +186,56 @@ router.post('/register', async (req,res) => {
     const email = req.body.email
     const password = req.body.password
     
-
-    let userData = {email,password,[mongoose.ObjectId]: []}
-
-    let dbUser = new userModel(userData)
+    let dbLogin
     try {
-        await dbUser.save();
-        res.status(200).send("OK")
+        dbLogin = await userModel.find({email})
+        console.log("dbLogin",dbLogin)
+        
+        if(dbLogin !== null) {
+            res.send({error: "such user already exists"})
+        } else {
+
+            let userData = {email,password,[mongoose.ObjectId]: []}
+
+            let dbUser = new userModel(userData)
+            try {
+                await dbUser.save();
+                res.status(200).send("OK")
+            } catch (error) {
+                res.status(500).send(error);
+            }
+        }
     } catch (error) {
+        console.log(error)
         res.status(500).send(error);
     }
+
+    
 })
 
 router.post('/login', async (req,res) => {
     console.log('post /login')
-    console.log(req.body)
+    console.log("req.body",req.body)
     const email = req.body.email
     const password = req.body.password
-    
+    //console.log("password",password)
 
     let userData = {email,password}
 
     let dbUser
     try {
-        dbUser = await userModel.find(userData)
+        dbUser = await userModel.findOne({email})
+        
         console.log("dbUser",dbUser)
-        res.send(dbUser)
+        //console.log("dbUser.password === password is ",dbUser.password === password,dbUser.password,password)
+        if (dbUser === null || dbUser.length === 0) {
+            res.send({error: "no such user"})
+        } else if (new String(dbUser.password).valueOf() !== new String(password).valueOf()) {
+            res.send({error: "incorrect password"})
+        } else {
+            res.send(dbUser)
+        }
+        
     } catch (error) {
         console.log(error)
         res.status(500).send(error);
