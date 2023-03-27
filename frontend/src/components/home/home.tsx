@@ -5,16 +5,26 @@ import './style.css'
 import  Dinero from "dinero.js";
 import { Box, Button, Card, CardActionArea, CardContent, CardHeader, CardMedia, Grid, Paper, Typography, styled } from '@mui/material';
 
+import { useCookies } from 'react-cookie'
+import authHeader from '../../authHeader';
+
 const Home = () => {
     const [spendingsList,setSpendingsList] = useState(null)
     const [limits,setLimits] = useState(null as any)
 
     //const [ignored, forceUpdate] = useReducer(x => x + 1, 0);
 
+    const user = JSON.parse(localStorage.getItem('user') as any);
+    const [cookies, setCookie] = useCookies(['email'])
+    console.log("user.email is ",user.email)
+    setCookie('email',user.email)
 
     useEffect(() => {
         const apiUrl = '/api/spendings';
-        axios.get(apiUrl,{
+        const xAccessToken = authHeader()
+        console.log("xAccessToken is ",xAccessToken)
+        axios.get(apiUrl,{ 
+            headers: xAccessToken,
             withCredentials: true,
           }).then((resp) => {
             console.log("get.then in useEffect")

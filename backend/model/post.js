@@ -17,6 +17,9 @@ const PostSchema = mongoose.Schema({
     image: {
         type: String,
         default: null 
+    },
+    author : {
+        type: String 
     }
 })
 

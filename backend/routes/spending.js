@@ -8,8 +8,14 @@ const mongoose = require('mongoose')
 const fs = require('fs');
 const path = require('path');
 
+const jwt = require("jsonwebtoken");
+const bcrypt = require("bcryptjs");
+
 //router.use(multer({dest:"uploads"}).single("filedata"));
 
+const config = {
+    secret: "bezkoder-secret-key"
+  };
 
 const helper = require('../model/helper'); 
 
@@ -45,9 +51,16 @@ function formNewSpendingWithId(_id,amount,type,comments,date,image) {
 
 router.get('/spendings', async (req,res) => {
     console.log("get /spendings")
-    const dbPosts = await postModel.find({})
+    // const dbPosts = await postModel.find({})
+    let accessToken = req.headers.referer["x-access-token"]
+    console.log("accessToken is ", accessToken)
 
-    //console.log("dbPosts",dbPosts)
+    const email = req.cookies.email
+    console.log("email is ",email)
+
+    const dbPosts = await postModel.find().where({author: email})
+
+    console.log("dbPosts",dbPosts)
     let listToShow = []
     let dineroList = []
     dbPosts.forEach(element => {
@@ -129,6 +142,8 @@ router.post('/add', async (req,res) => {
     //console.log(comments)
     const date = new Date()
     //console.log("date " + date)
+    
+    // TODO add author
 
     let filedata = req.file;
     console.log("filedata",filedata);
@@ -191,11 +206,15 @@ router.post('/register', async (req,res) => {
         dbLogin = await userModel.find({email})
         console.log("dbLogin",dbLogin)
         
-        if(dbLogin !== null) {
+        if(dbLogin !== null && dbLogin.length !== 0) {
             res.send({error: "such user already exists"})
         } else {
 
-            let userData = {email,password,[mongoose.ObjectId]: []}
+            let hashedPassword = bcrypt.hashSync(password, 8);
+            let userData = {
+                email: email, 
+                password: hashedPassword
+            }
 
             let dbUser = new userModel(userData)
             try {
@@ -230,11 +249,28 @@ router.post('/login', async (req,res) => {
         //console.log("dbUser.password === password is ",dbUser.password === password,dbUser.password,password)
         if (dbUser === null || dbUser.length === 0) {
             res.send({error: "no such user"})
-        } else if (new String(dbUser.password).valueOf() !== new String(password).valueOf()) {
+            return;
+        } 
+
+        var passwordIsValid = bcrypt.compareSync(
+            password,
+            dbUser.password
+          );
+
+        if (!passwordIsValid) {
             res.send({error: "incorrect password"})
-        } else {
-            res.send(dbUser)
-        }
+            return;
+        } 
+
+        let token = jwt.sign({ id: dbUser._id }, config.secret, {
+            expiresIn: 60 // 24 hours
+          });
+
+        res.send({
+            email: dbUser.email,
+            accessToken: token
+        })
+        
         
     } catch (error) {
         console.log(error)

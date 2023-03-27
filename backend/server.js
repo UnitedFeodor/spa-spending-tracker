@@ -6,10 +6,13 @@ const cors = require('cors')
 // mongodb+srv://user:<password>@cluster0.adt1pnf.mongodb.net/?retryWrites=true&w=majority
 const bodyParser = require('body-parser');
 
+const cookieParser = require("cookie-parser");
+
 
 const multer  = require("multer");
 app.use(multer({dest:"uploads"}).single("filedata"));
 app.use(bodyParser.json());
+app.use(cookieParser());
 
 //app.listen(3000)
 app.set('view engine', 'ejs')

@@ -6,9 +6,6 @@ const UserSchema = mongoose.Schema({
     }, 
     password: {
         type: String 
-    }, 
-    spendings: {
-        type: [mongoose.ObjectId] 
     }
     
 })

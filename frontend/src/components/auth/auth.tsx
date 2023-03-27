@@ -23,7 +23,16 @@ const AuthRootComponent = () => {
         if (location.pathname === '/login') {
             console.log("/login")
             const user = await axios.post("/api/login",userData)
-            console.log(user.data)
+                .then(response => {
+                    console.log("response.data which is str user in localStorage: ",response.data)
+                    if (response.data.accessToken) {
+                        localStorage.setItem("user", JSON.stringify(response.data));
+                        
+                    }
+            })
+            
+            
+
         } else if(location.pathname === '/register') {
             console.log("/register")
             const user = await axios.post("/api/register",userData)
