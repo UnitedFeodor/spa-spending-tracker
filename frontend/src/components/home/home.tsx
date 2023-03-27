@@ -1,6 +1,6 @@
 import axios from 'axios'
 import React, { Fragment, Key, useEffect, useReducer, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import './style.css'
 import  Dinero from "dinero.js";
 import { Box, Button, Card, CardActionArea, CardContent, CardHeader, CardMedia, Grid, Paper, Typography, styled } from '@mui/material';
@@ -11,6 +11,7 @@ import authHeader from '../../authHeader';
 const Home = () => {
     const [spendingsList,setSpendingsList] = useState(null)
     const [limits,setLimits] = useState(null as any)
+    const navigate = useNavigate()
 
     //const [ignored, forceUpdate] = useReducer(x => x + 1, 0);
 
@@ -36,6 +37,12 @@ const Home = () => {
         });
       }, []);
     
+    const handleLogout = (event : any) => {
+        console.log(handleLogout)
+        axios.post(`/api/logout`).then((res) => {
+            navigate("/login")
+        })
+    }
     
     const handleSubmit = (event : any) => {
         console.log('handleSubmit ran');
@@ -221,6 +228,7 @@ const Home = () => {
                 <Typography variant='h2' sx={{alignSelf: 'center'}}>SPENDINGS TRACKER</Typography>
                 <Button variant='text'><Link to="/login">LOGIN</Link></Button>
                 <Button variant='text'><Link to="/register">REGISTER</Link></Button>
+                <Button variant='text' onClick={handleLogout}>LOGOUT</Button>
             </Box>
                     
             
