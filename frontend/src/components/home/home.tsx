@@ -14,10 +14,10 @@ const Home = () => {
 
     //const [ignored, forceUpdate] = useReducer(x => x + 1, 0);
 
-    const user = JSON.parse(localStorage.getItem('user') as any);
-    const [cookies, setCookie] = useCookies(['email'])
-    console.log("user.email is ",user.email)
-    setCookie('email',user.email)
+    // const user = JSON.parse(localStorage.getItem('user') as any);
+    // const [cookies, setCookie] = useCookies(['email'])
+    // console.log("user.email is ",user.email)
+    // setCookie('email',user.email)
 
     useEffect(() => {
         const apiUrl = '/api/spendings';

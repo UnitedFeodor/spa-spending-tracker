@@ -52,10 +52,11 @@ function formNewSpendingWithId(_id,amount,type,comments,date,image) {
 router.get('/spendings', async (req,res) => {
     console.log("get /spendings")
     // const dbPosts = await postModel.find({})
-    let accessToken = req.headers.referer["x-access-token"]
+    let accessToken = req.headers["x-access-token"]
     console.log("accessToken is ", accessToken)
 
-    const email = req.cookies.email
+    console.log("cookies are ",req.cookies)
+    const email = req.cookies['email']
     console.log("email is ",email)
 
     const dbPosts = await postModel.find().where({author: email})
@@ -265,6 +266,9 @@ router.post('/login', async (req,res) => {
         let token = jwt.sign({ id: dbUser._id }, config.secret, {
             expiresIn: 60 // 24 hours
           });
+
+        //res.setHeader('Set-Cookie','email='+dbUser.email);
+        res.cookie('email', dbUser.email);
 
         res.send({
             email: dbUser.email,
