@@ -282,5 +282,11 @@ router.post('/login', async (req,res) => {
     }
 })
 
+router.post('/logout', async (req,res) => {
+    console.log("post /logout")
+    res.cookie('email', '',{maxAge: 0});
+    res.status(200).send("OK") 
+})
+
 
 module.exports = router
