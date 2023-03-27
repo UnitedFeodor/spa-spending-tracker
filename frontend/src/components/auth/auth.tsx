@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import RegisterPage from './register/register';
 import LoginPage from './login/login';
 import { Box, Button } from '@mui/material';
@@ -11,6 +11,7 @@ const AuthRootComponent = () => {
     const [email,setEmail] = useState('')
     const [password,setPassword] = useState('')
 
+    const navigate = useNavigate()
     const location = useLocation()
 
     const handleSubmit = async (e: { preventDefault: () => void; }) => {
@@ -27,7 +28,7 @@ const AuthRootComponent = () => {
                     console.log("response.data which is str user in localStorage: ",response.data)
                     if (response.data.accessToken) {
                         localStorage.setItem("user", JSON.stringify(response.data));
-                        
+                        navigate("/")
                     }
             })
             
@@ -36,7 +37,15 @@ const AuthRootComponent = () => {
         } else if(location.pathname === '/register') {
             console.log("/register")
             const user = await axios.post("/api/register",userData)
-            console.log(user.data)
+                .then(response => {
+                    console.log(response.data)
+
+                    if (response.status === 200) {
+                        navigate("/login")
+                    } 
+                
+            })
+            
         }
 
     }

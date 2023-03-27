@@ -37,8 +37,8 @@ let params = {
 let limitsObjects = helper.setLimitsFromDaily(dailyLimit,3,2023)
 
 
-function formNewSpending(amount,type,comments,date,image) {
-    let entry = {amount,type,comments,date,image}
+function formNewSpending(amount,type,comments,date,image,author) {
+    let entry = {amount,type,comments,date,image,author}
     return entry
 }
 
@@ -143,7 +143,7 @@ router.post('/add', async (req,res) => {
     //console.log(comments)
     const date = new Date()
     //console.log("date " + date)
-    
+    const author = req.cookies['email']
     // TODO add author
 
     let filedata = req.file;
@@ -157,7 +157,7 @@ router.post('/add', async (req,res) => {
         
     //addNewSpending(amount, spendingType, comments, date, filedata)
 
-    let newPost = formNewSpending(helper.dineroToFormattedNumberUSD(amount), spendingType, comments, date, filedata)
+    let newPost = formNewSpending(helper.dineroToFormattedNumberUSD(amount), spendingType, comments, date, filedata,author)
     let post = new postModel(newPost)
     //post.markModified('amount')
     try {
