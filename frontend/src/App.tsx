@@ -7,18 +7,31 @@ import LimitsPage from './components/limits/limits';
 import AuthRootComponent from './components/auth/auth';
 import './index.css' 
 import NotFound404 from './components/error/404';
+import { PrivateRoute } from './components/PrivateRoute';
 
 function App() {
   return (
     <div className="App">
         <Routes>
           <Route path='*' element={<NotFound404 />}/>
-          <Route path="/" element={<Home/>}/>
+          <Route path="/" element={
+            <PrivateRoute>
+              <Home/>
+            </PrivateRoute>
+          }/>
           <Route path="/login" element={<AuthRootComponent/>}/>
           <Route path="/register" element={<AuthRootComponent/>}/>
           
-          <Route path="/add" element={<AddPage/>}/>
-          <Route path="/limits" element={<LimitsPage/>}/>
+          <Route path="/add" element={
+            <PrivateRoute>
+              <AddPage/>
+            </PrivateRoute>
+          }/>
+          <Route path="/limits" element={
+            <PrivateRoute>
+              <LimitsPage/>
+            </PrivateRoute>
+          }/>
         </Routes>
         
     </div>

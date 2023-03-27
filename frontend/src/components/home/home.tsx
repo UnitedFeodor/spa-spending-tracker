@@ -13,12 +13,7 @@ const Home = () => {
     const [limits,setLimits] = useState(null as any)
     const navigate = useNavigate()
 
-    //const [ignored, forceUpdate] = useReducer(x => x + 1, 0);
 
-    // const user = JSON.parse(localStorage.getItem('user') as any);
-    // const [cookies, setCookie] = useCookies(['email'])
-    // console.log("user.email is ",user.email)
-    // setCookie('email',user.email)
 
     useEffect(() => {
         const apiUrl = '/api/spendings';
@@ -39,6 +34,7 @@ const Home = () => {
     
     const handleLogout = (event : any) => {
         console.log(handleLogout)
+        localStorage.clear();
         axios.post(`/api/logout`).then((res) => {
             navigate("/login")
         })
@@ -226,8 +222,8 @@ const Home = () => {
                 flexDirection='column'
             >
                 <Typography variant='h2' sx={{alignSelf: 'center'}}>SPENDINGS TRACKER</Typography>
-                <Button variant='text'><Link to="/login">LOGIN</Link></Button>
-                <Button variant='text'><Link to="/register">REGISTER</Link></Button>
+                {/* <Button variant='text'><Link to="/login">LOGIN</Link></Button>
+                <Button variant='text'><Link to="/register">REGISTER</Link></Button> */}
                 <Button variant='text' onClick={handleLogout}>LOGOUT</Button>
             </Box>
                     

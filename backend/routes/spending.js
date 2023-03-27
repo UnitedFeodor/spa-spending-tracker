@@ -94,6 +94,10 @@ router.delete('/spendings/:id', async (req,res) => {
     let dbPost
     try {
         dbPost = await postModel.findById(_id)
+        const email = req.cookies['email']
+        if (dbPost.email !== email) {
+            throw new Error("cannot delete other user's spendings")
+        }
         console.log("dbPost",dbPost)
         //console.log(await postModel.countDocuments(_id))// 1
     } catch (error) {
