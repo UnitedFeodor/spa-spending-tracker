@@ -48,10 +48,6 @@ function formNewSpendingWithId(_id,amount,type,comments,date,image) {
 
 router.get('/spendings', [authJwt.verifyToken], async (req,res) => {
     console.log("get /spendings")
-    // const dbPosts = await postModel.find({})
-    let accessToken = req.headers["x-access-token"]
-    //authJwt.verifyToken(accessToken)
-    console.log("accessToken is ", accessToken)
 
     console.log("cookies are ",req.cookies)
     const email = req.cookies['email']
@@ -271,10 +267,11 @@ router.post('/login', async (req,res) => {
 
         //res.setHeader('Set-Cookie','email='+dbUser.email);
         res.cookie('email', dbUser.email);
+        res.cookie('accessToken', token);
 
-        res.send({
-            email: dbUser.email,
-            accessToken: token
+        res.status(200).send({
+            //email: dbUser.email,
+            refreshToken: token
         })
         
         

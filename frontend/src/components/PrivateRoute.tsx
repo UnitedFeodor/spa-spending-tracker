@@ -6,6 +6,8 @@ import {
   
   export function PrivateRoute({ children }: RouteProps): JSX.Element {
     const isLoggedIn = Object.keys(authHeader()).length !== 0 
+    console.log("authHeader",authHeader())
+    console.log("privateRoute isLoggedIn",isLoggedIn)
     return (
       <>
         {
