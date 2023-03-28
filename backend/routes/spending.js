@@ -13,12 +13,9 @@ const bcrypt = require("bcryptjs");
 
 //router.use(multer({dest:"uploads"}).single("filedata"));
 
-const config = {
-    secret: "bezkoder-secret-key"
-  };
-
 const helper = require('../model/helper'); 
-
+const authJwt = require('../model/authJwt');
+const config = require("../config/auth.config");
 
 var list = [
     { _id: "1",amount: "1000", type: "food", comments: "cola pizza burgir", date: new Date(), image: null },
@@ -49,10 +46,11 @@ function formNewSpendingWithId(_id,amount,type,comments,date,image) {
 }
 
 
-router.get('/spendings', async (req,res) => {
+router.get('/spendings', [authJwt.verifyToken], async (req,res) => {
     console.log("get /spendings")
     // const dbPosts = await postModel.find({})
     let accessToken = req.headers["x-access-token"]
+    //authJwt.verifyToken(accessToken)
     console.log("accessToken is ", accessToken)
 
     console.log("cookies are ",req.cookies)
@@ -87,7 +85,7 @@ router.get('/spendings', async (req,res) => {
     res.json(params)
 })
 
-router.delete('/spendings/:id', async (req,res) => { 
+router.delete('/spendings/:id', [authJwt.verifyToken], async (req,res) => { 
     console.log("delete /",req.params.id)
 
     const _id = new mongoose.Types.ObjectId(req.params.id)
@@ -128,14 +126,14 @@ router.delete('/spendings/:id', async (req,res) => {
 
 })
 
-router.get('/add',(req,res) => {
+router.get('/add', [authJwt.verifyToken], (req,res) => {
     console.log("get /add")
     res.status(200).send("OK") 
     //res.render('add', params)
 })
 
 
-router.post('/add', async (req,res) => {
+router.post('/add', [authJwt.verifyToken], async (req,res) => {
     console.log("post /add")
     console.log(req.body.amount + " = req body amount")
 
@@ -175,13 +173,13 @@ router.post('/add', async (req,res) => {
     
 })
 
-router.get('/limits',(req,res) => {
+router.get('/limits', [authJwt.verifyToken], (req,res) => {
     console.log("get /limits")
      
     res.json(helper.dineroToFormattedNumberUSD(limitsObjects.dailyLimit))
 })
 
-router.put('/limits',(req,res) => {
+router.put('/limits', [authJwt.verifyToken],(req,res) => {
     console.log("put /limits")
     console.log(req.body)
     const amount = helper.parseUSDFromFormattedString(req.body.amount)
@@ -286,7 +284,7 @@ router.post('/login', async (req,res) => {
     }
 })
 
-router.post('/logout', async (req,res) => {
+router.post('/logout', [authJwt.verifyToken], async (req,res) => {
     console.log("post /logout")
     res.cookie('email', '',{maxAge: 0});
     res.status(200).send("OK") 

@@ -13,11 +13,12 @@ const Home = () => {
     const [limits,setLimits] = useState(null as any)
     const navigate = useNavigate()
 
+    const xAccessToken = authHeader()
 
 
     useEffect(() => {
         const apiUrl = '/api/spendings';
-        const xAccessToken = authHeader()
+        
         console.log("xAccessToken is ",xAccessToken)
         axios.get(apiUrl,{ 
             headers: xAccessToken,
@@ -35,7 +36,10 @@ const Home = () => {
     const handleLogout = (event : any) => {
         console.log(handleLogout)
         localStorage.clear();
-        axios.post(`/api/logout`).then((res) => {
+        axios.post(`/api/logout`,{ 
+            headers: xAccessToken,
+            withCredentials: true,
+          }).then((res) => {
             navigate("/login")
         })
     }
@@ -44,7 +48,10 @@ const Home = () => {
         console.log('handleSubmit ran');
         event.preventDefault();
         
-        axios.delete(`/api/spendings/${event.target._id.value}`).then((res) => {
+        axios.delete(`/api/spendings/${event.target._id.value}`,{ 
+            headers: xAccessToken,
+            withCredentials: true,
+          }).then((res) => {
                 console.log("postForm.then")
                 const apiUrl = '/api/spendings';
                 axios.get(apiUrl).then((resp) => {

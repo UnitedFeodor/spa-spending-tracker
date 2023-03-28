@@ -8,6 +8,7 @@ import AuthRootComponent from './components/auth/auth';
 import './index.css' 
 import NotFound404 from './components/error/404';
 import { PrivateRoute } from './components/PrivateRoute';
+import { NoAuthPagesRoute } from './components/NoAuthPagesRoute';
 
 function App() {
   return (
@@ -19,7 +20,11 @@ function App() {
               <Home/>
             </PrivateRoute>
           }/>
-          <Route path="/login" element={<AuthRootComponent/>}/>
+          <Route path="/login" element={
+            <NoAuthPagesRoute>
+              <AuthRootComponent/>
+            </NoAuthPagesRoute>
+          }/>
           <Route path="/register" element={<AuthRootComponent/>}/>
           
           <Route path="/add" element={

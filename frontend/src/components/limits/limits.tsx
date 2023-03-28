@@ -3,6 +3,7 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { validateLimitsForm } from '../../validation';
+import authHeader from '../../authHeader';
 
 const LimitsPage = () => {
 
@@ -15,10 +16,16 @@ const LimitsPage = () => {
         setType(event.target.value);
     };
 
+    let xAccessToken = authHeader() 
+
+    let contentType = {'content-type': 'application/json' }
+    const headers =  {...contentType, ...xAccessToken};
+
     useEffect(() => {
         const apiUrl = '/api/limits';
         axios.get(apiUrl,{
-            withCredentials: true,
+            headers: xAccessToken,
+            withCredentials: true
           }).then((resp) => {
             console.log("get.then in useEffect limits")
             const data = resp.data;
@@ -41,9 +48,8 @@ const LimitsPage = () => {
                 type:  type,
             }, 
             {
-                headers: {
-                'content-type': 'application/json' 
-                }
+                headers: headers,
+                withCredentials: true
             }
             ).then((res) => {
                 navigate("/")

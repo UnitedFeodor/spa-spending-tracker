@@ -3,17 +3,21 @@ import axios from 'axios';
 import React from 'react';
 import { Link, redirect, useNavigate } from 'react-router-dom';
 import { validateSpendingForm } from '../../validation';
+import authHeader from '../../authHeader';
 
 const AddPage = () => {
     const navigate = useNavigate()
 
-   // TODO form validation
+    let xAccessToken = authHeader() 
+
+    let contentType = {'content-type': 'multipart/form-data'}
+    const headers =  {...contentType, ...xAccessToken};
+
    const handleSubmit = (event : any) => {
         console.log('add handleSubmit ran');
         event.preventDefault();
         if (validateSpendingForm(event.target)) {
 
-        
             const fileToUpload = event.target.filedata.files[0]//event.target.filedata.value
             console.log(fileToUpload)
             let form = new FormData();
@@ -22,9 +26,7 @@ const AddPage = () => {
             form.set('type',event.target.type.value)
             form.set('comments',event.target.comments.value)
             axios.postForm('/api/add', form, {
-                headers: {
-                'content-type': 'multipart/form-data' // do not forget this 
-                }
+                headers: headers, withCredentials: true
             }).then((res) => {
                 navigate("/")
             }).catch(function (error) {
