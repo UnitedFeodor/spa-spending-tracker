@@ -266,7 +266,7 @@ router.post('/login', async (req,res) => {
         } 
 
         let token = jwt.sign({ id: dbUser._id }, config.secret, {
-            expiresIn: 60 // 24 hours
+            expiresIn: 600 
           });
 
         //res.setHeader('Set-Cookie','email='+dbUser.email);
@@ -284,7 +284,7 @@ router.post('/login', async (req,res) => {
     }
 })
 
-router.post('/logout', [authJwt.verifyToken], async (req,res) => {
+router.post('/logout', async (req,res) => {
     console.log("post /logout")
     res.cookie('email', '',{maxAge: 0});
     res.status(200).send("OK") 

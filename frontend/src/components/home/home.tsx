@@ -30,7 +30,12 @@ const Home = () => {
             console.log("resp.data.list is ",resp.data.list);
             setSpendingsList(data.list);
             setLimits(data.limits)
-        });
+        }).catch((error) => {
+
+            alert("Please, sign in once again.")
+
+            handleLogout(navigate)
+        })
       }, []);
     
     const handleLogout = (event : any) => {
