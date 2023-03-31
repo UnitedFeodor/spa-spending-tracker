@@ -4,6 +4,8 @@ const router = express.Router()
 const multer  = require("multer");
 const postModel = require("../model/post");
 const userModel = require("../model/user");
+const refreshTokenModel = require("../model/refreshToken");
+
 const mongoose = require('mongoose')
 const fs = require('fs');
 const path = require('path');
@@ -55,7 +57,7 @@ router.get('/spendings', [authJwt.verifyToken], async (req,res) => {
 
     const dbPosts = await postModel.find().where({author: email})
 
-    console.log("dbPosts",dbPosts)
+    //console.log("dbPosts",dbPosts)
     let listToShow = []
     let dineroList = []
     dbPosts.forEach(element => {
@@ -142,7 +144,6 @@ router.post('/add', [authJwt.verifyToken], async (req,res) => {
     const date = new Date()
     //console.log("date " + date)
     const author = req.cookies['email']
-    // TODO add author
 
     let filedata = req.file;
     console.log("filedata",filedata);
@@ -261,17 +262,18 @@ router.post('/login', async (req,res) => {
             return;
         } 
 
-        let token = jwt.sign({ id: dbUser._id }, config.secret, {
-            expiresIn: 600 
-          });
+        let refreshToken = await refreshTokenModel.createToken(dbUser);
+
+        let accessToken = jwt.sign({ id: dbUser.email }, config.secret, {
+            expiresIn: 10
+        });
 
         //res.setHeader('Set-Cookie','email='+dbUser.email);
         res.cookie('email', dbUser.email);
-        res.cookie('accessToken', token);
+        res.cookie('refreshToken', refreshToken);
 
         res.status(200).send({
-            //email: dbUser.email,
-            refreshToken: token
+            accessToken: accessToken
         })
         
         
@@ -284,8 +286,61 @@ router.post('/login', async (req,res) => {
 router.post('/logout', async (req,res) => {
     console.log("post /logout")
     res.cookie('email', '',{maxAge: 0});
+    res.cookie('accessToken', '',{maxAge: 0});
+    res.cookie('refreshToken', '',{maxAge: 0});
     res.status(200).send("OK") 
 })
 
+// router.get('/token', [authJwt.verifyToken], async (req,res) => {
+//     res.status(200).send("OK") 
+// })
+router.get('/token', async (req, res) => {
+    console.log("get /token")
+    const requestToken = req.cookies['refreshToken'];
+    console.log("req.cookies['refreshToken']: ",req.cookies['refreshToken'])
+  
+    console.log("requestToken: ",requestToken)
+    if (requestToken == null) {
+        return res.status(403).json({ message: "Refresh Token is required!" });
+    }
+  
+    try {
+        let refreshToken = await refreshTokenModel.findOne({ token: requestToken });
+    
+        console.log("refreshToken: ",refreshToken)
+        if (!refreshToken) {
+            res.status(403).json({ message: "Refresh token is not in database!" });
+            return;
+        }
+    
+        if (refreshTokenModel.verifyExpiration(refreshToken)) {
+            refreshTokenModel.findByIdAndRemove(refreshToken._id, { useFindAndModify: false }).exec();
+            
+            res.status(403).json({
+                message: "Refresh token was expired. Please make a new signin request",
+            });
+            return;
+        }
+    
+        let newAccessToken = jwt.sign({ id: refreshToken.user.email }, config.secret, {
+            expiresIn: config.jwtAccessExpiration,
+        });
+    
+        //   return res.status(200).json({
+        //     accessToken: newAccessToken,
+        //     refreshToken: refreshToken.token,
+        //   });
+        res.cookie('refreshToken', refreshToken.token);
+
+        console.log("newAccessToken: ",newAccessToken)
+        res.status(200).send({
+            accessToken: newAccessToken
+        })
+
+    } catch (err) {
+        return res.status(500).send({ message: err });
+    }
+  }
+)
 
 module.exports = router

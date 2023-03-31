@@ -8,12 +8,12 @@ export default function authHeader() {
   //   return {};
   // }
 
-  const user = JSON.parse(localStorage.getItem('refreshToken') as any)
-  
+  const user = JSON.parse(localStorage.getItem('accessToken') as any)
+  console.log("authHeader token from localStorage: ",user)
   if (user) {
-    // for Node.js Express back-end
-    return { 'x-refresh-token': user };
+      // for Node.js Express back-end
+      return { 'x-access-token': user };
   } else {
-    return {};
+      return {};
   }
 }

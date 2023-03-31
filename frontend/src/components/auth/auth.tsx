@@ -26,8 +26,8 @@ const AuthRootComponent = () => {
             const user = await axios.post("/api/login",userData)
                 .then(response => {
                     console.log("response.data which is str user in localStorage: ",response.data)
-                    if (response.data.refreshToken) {
-                        localStorage.setItem("refreshToken", JSON.stringify(response.data.refreshToken));
+                    if (response.data.accessToken) {
+                        localStorage.setItem("accessToken", JSON.stringify(response.data.accessToken));
                         navigate("/")
                     }
             })

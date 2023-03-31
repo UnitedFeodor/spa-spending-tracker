@@ -4,8 +4,11 @@ import React from 'react';
 import { Link, redirect, useNavigate } from 'react-router-dom';
 import { validateSpendingForm } from '../../validation';
 import authHeader from '../../authHeader';
+import checkAndGetTokens from '../../checkAndGetTokens';
 
 const AddPage = () => {
+    //checkAndGetTokens()
+
     const navigate = useNavigate()
 
     let xAccessToken = authHeader() 
@@ -13,7 +16,7 @@ const AddPage = () => {
     let contentType = {'content-type': 'multipart/form-data'}
     const headers =  {...contentType, ...xAccessToken};
 
-   const handleSubmit = (event : any) => {
+    const handleSubmit = (event : any) => {
         console.log('add handleSubmit ran');
         event.preventDefault();
         if (validateSpendingForm(event.target)) {
