@@ -91,14 +91,18 @@ router.delete('/spendings/:id', [authJwt.verifyToken], async (req,res) => {
     try {
         dbPost = await postModel.findById(_id)
         const email = req.cookies['email']
-        if (dbPost.email !== email) {
-            throw new Error("cannot delete other user's spendings")
+        console.log("email",email)
+        console.log("dbPost.author",dbPost.author)
+        if (dbPost.author !== email) {
+            res.status(401).send("Unauthorized access to spendings");
+            return;
         }
         console.log("dbPost",dbPost)
         //console.log(await postModel.countDocuments(_id))// 1
     } catch (error) {
         console.log(error)
         res.status(500).send(error);
+        return;
     }
 
     let image = dbPost.image    
@@ -116,7 +120,6 @@ router.delete('/spendings/:id', [authJwt.verifyToken], async (req,res) => {
         //await postModel.findByID(_id)
         console.log(await postModel.countDocuments(_id))// 0
         res.status(200).send("OK")
-        //res.redirect("/")
     } catch (error) {
         res.status(500).send(error);
     }
