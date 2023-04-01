@@ -9,7 +9,7 @@ export default function authHeader() {
   // }
 
   const user = JSON.parse(localStorage.getItem('accessToken') as any)
-  console.log("authHeader token from localStorage: ",user)
+  console.log("authHeader method - accessToken from localStorage is: ",user)
   if (user) {
       // for Node.js Express back-end
       return { 'x-access-token': user };

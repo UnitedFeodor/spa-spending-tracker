@@ -49,7 +49,7 @@ function formNewSpendingWithId(_id,amount,type,comments,date,image) {
 
 
 router.get('/spendings', [authJwt.verifyToken], async (req,res) => {
-    console.log("get /spendings")
+    console.log("\n\nget /spendings")
 
     console.log("cookies are ",req.cookies)
     const email = req.cookies['email']
@@ -233,7 +233,7 @@ router.post('/register', async (req,res) => {
 })
 
 router.post('/login', async (req,res) => {
-    console.log('post /login')
+    console.log('\n\npost /login')
     console.log("req.body",req.body)
     const email = req.body.email
     const password = req.body.password
@@ -284,7 +284,7 @@ router.post('/login', async (req,res) => {
 })
 
 router.post('/logout', async (req,res) => {
-    console.log("post /logout")
+    console.log("\n\npost /logout")
     res.cookie('email', '',{maxAge: 0});
     res.cookie('accessToken', '',{maxAge: 0});
     res.cookie('refreshToken', '',{maxAge: 0});
@@ -295,7 +295,7 @@ router.post('/logout', async (req,res) => {
 //     res.status(200).send("OK") 
 // })
 router.get('/token', async (req, res) => {
-    console.log("get /token")
+    console.log("\n\nget /token")
     const requestToken = req.cookies['refreshToken'];
     console.log("req.cookies['refreshToken']: ",req.cookies['refreshToken'])
   
@@ -330,7 +330,14 @@ router.get('/token', async (req, res) => {
         //     accessToken: newAccessToken,
         //     refreshToken: refreshToken.token,
         //   });
+        // dbUser = await userModel.findOne({email})
+        // if (!dbUser) {
+        //     res.status(403).json({ message: "User is not in database!" });
+        //     return;
+        // }
+
         res.cookie('refreshToken', refreshToken.token);
+        //res.cookie('email', dbUser.email);
 
         console.log("newAccessToken: ",newAccessToken)
         res.status(200).send({

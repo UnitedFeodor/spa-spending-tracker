@@ -5,6 +5,7 @@ import './style.css'
 import  Dinero from "dinero.js";
 import { Box, Button, Card, CardActionArea, CardContent, CardHeader, CardMedia, Grid, Paper, Typography, styled } from '@mui/material';
 
+import createAuthRefreshInterceptor from 'axios-auth-refresh';
 import { useCookies } from 'react-cookie'
 import authHeader from '../../authHeader';
 
@@ -13,73 +14,117 @@ const Home = () => {
     const [limits,setLimits] = useState(null as any)
     const navigate = useNavigate()
 
-    
-
-    useEffect(() => {
-
-        
-
-
-        const apiUrl = '/api/spendings';
-
-        console.log("xAccessToken is ",authHeader())
-            axios.get(apiUrl,{ 
+    const refreshAuthLogic = async (failedRequest: any) =>
+        {
+            console.log("inside refreshAuthLogic")
+            const tokenUrl = '/api/token';
+            await axios.get(tokenUrl,{ 
                 headers: authHeader(),
                 withCredentials: true,
-            }).then((resp) => {
-
-                
-                console.log("get.then in useEffect")
-                const data = resp.data;
-                console.log("resp.data is ",resp.data);
-                console.log("resp.data.list is ",resp.data.list);
-                setSpendingsList(data.list);
-                setLimits(data.limits)
+            }).then((response) => {
+                console.log("refreshAuthLogic response.data: ",response.data)
+                if (response.data.accessToken) {
+                    console.log("then response.data.accessToken: ",response.data.accessToken)
+                    localStorage.setItem("accessToken", JSON.stringify(response.data.accessToken));
+                    failedRequest.response.config.headers['x-access-token'] = response.data.accessToken;
+                }
+                return Promise.resolve();
             }).catch((error) => {
-                
-                const tokenUrl = '/api/token';
-                axios.get(tokenUrl,{ 
-                    headers: authHeader(),
-                    withCredentials: true,
-                }).then((response) => {
-                    
-                    if (response.data.accessToken) {
-                        console.log("then response.data.accessToken: ",response.data.accessToken)
-                        localStorage.setItem("accessToken", JSON.stringify(response.data.accessToken));
+                console.log("get token .catch inside refteshAuthLogic: ",error)
+            });
+                // axios.post('https://www.example.com/auth/token/refresh').then((tokenRefreshResponse) => {
+                //     localStorage.setItem('token', tokenRefreshResponse.data.token);
+                //     failedRequest.response.config.headers['Authorization'] = 'Bearer ' + tokenRefreshResponse.data.token;
+                //     return Promise.resolve();}
 
-                    axios.get(apiUrl,{ 
-                        headers: authHeader(),
-                        withCredentials: true,
-                      }).then((resp) => {
+            
+        }
+
+    // Instantiate the interceptor
+    createAuthRefreshInterceptor(axios, refreshAuthLogic as any,{
+        pauseInstanceWhileRefreshing: false, // default: false
+    });
+
+    useEffect(() => {
+        const apiUrl = '/api/spendings';
+
+        //console.log("authHeader is ",authHeader())
+        axios.get(apiUrl,{ 
+            headers: authHeader(),
+            withCredentials: true,
+        }).then((resp) => {
+            
+            console.log("get.then in useEffect")
+            const data = resp.data;
+            console.log("resp.data is ",resp.data);
+            console.log("resp.data.list is ",resp.data.list);
+            setSpendingsList(data.list);
+            setLimits(data.limits)
+        }).catch((error) => {
+            console.log("inside get .catch")
+            //alert("Please, sign in once again.")
+            
+            //handleLogout(navigate) 
+
+        })
+    }, []);
+            // axios.get(apiUrl,{ 
+            //     headers: authHeader(),
+            //     withCredentials: true,
+            // }).then((resp) => {
+
+                
+            //     console.log("get.then in useEffect")
+            //     const data = resp.data;
+            //     console.log("resp.data is ",resp.data);
+            //     console.log("resp.data.list is ",resp.data.list);
+            //     setSpendingsList(data.list);
+            //     setLimits(data.limits)
+            // }).catch((error) => {
+                
+            //     const tokenUrl = '/api/token';
+            //     axios.get(tokenUrl,{ 
+            //         headers: authHeader(),
+            //         withCredentials: true,
+            //     }).then((response) => {
+                    
+            //         if (response.data.accessToken) {
+            //             console.log("then response.data.accessToken: ",response.data.accessToken)
+            //             localStorage.setItem("accessToken", JSON.stringify(response.data.accessToken));
+
+            //         axios.get(apiUrl,{ 
+            //             headers: authHeader(),
+            //             withCredentials: true,
+            //           }).then((resp) => {
             
                         
-                        console.log("get.then in useEffect")
-                        const data = resp.data;
-                        console.log("resp.data is ",resp.data);
-                        console.log("resp.data.list is ",resp.data.list);
-                        setSpendingsList(data.list);
-                        setLimits(data.limits)
-                    })
-                    } else {
-                        alert("Please, sign in once again.")
+            //             console.log("get.then in useEffect")
+            //             const data = resp.data;
+            //             console.log("resp.data is ",resp.data);
+            //             console.log("resp.data.list is ",resp.data.list);
+            //             setSpendingsList(data.list);
+            //             setLimits(data.limits)
+            //         })
+            //         } else {
+            //             alert("Please, sign in once again.")
             
-                        handleLogout(navigate) 
-                    }
+            //             handleLogout(navigate) 
+            //         }
 
-                }).catch((response) => {
+            //     }).catch((response) => {
                 
-                    alert("Please, sign in once again.")
+            //         alert("Please, sign in once again.")
                 
-                    handleLogout(navigate) 
+            //         handleLogout(navigate) 
             
-                })
+            //     })
 
             
-            })
-      }, []);
+            // })
+      
     
     const handleLogout = (event : any) => {
-        console.log(handleLogout)
+        console.log("handleLogout ran")
         localStorage.clear();
         axios.post(`/api/logout`,{ 
             headers: authHeader(),
@@ -298,4 +343,5 @@ const Home = () => {
         </div>
     )
 }
+
 export default Home
