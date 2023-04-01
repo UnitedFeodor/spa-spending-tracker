@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { validateLimitsForm } from '../../validation';
 import authHeader from '../../authHeader';
+import handleLogout from '../../handleLogout';
 
 const LimitsPage = () => {
 
@@ -55,6 +56,11 @@ const LimitsPage = () => {
                 navigate("/")
             }
             ).catch(function (error) {
+                if (Object.keys(authHeader()).length === 0 ) {
+                    alert("Please, sign in once again.")
+                    handleLogout(navigate) 
+                }
+
                 if (error.response) {
                     // The request was made and the server responded with a status code
                     // that falls out of the range of 2xx

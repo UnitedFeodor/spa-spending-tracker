@@ -5,6 +5,7 @@ import { Link, redirect, useNavigate } from 'react-router-dom';
 import { validateSpendingForm } from '../../validation';
 import authHeader from '../../authHeader';
 import checkAndGetTokens from '../../checkAndGetTokens';
+import handleLogout from '../../handleLogout';
 
 const AddPage = () => {
     //checkAndGetTokens()
@@ -33,14 +34,19 @@ const AddPage = () => {
             }).then((res) => {
                 navigate("/")
             }).catch(function (error) {
+                if (Object.keys(authHeader()).length === 0 ) {
+                    alert("Please, sign in once again.")
+                    handleLogout(navigate) 
+                }
+
                 if (error.response) {
                 // The request was made and the server responded with a status code
                 // that falls out of the range of 2xx
                 //alert("Internal server error! Try again later")
-                navigate("/login")
-                console.log(error.response.data);
-                console.log(error.response.status);
-                console.log(error.response.headers);
+                    
+                    console.log(error.response.data);
+                    console.log(error.response.status);
+                    console.log(error.response.headers);
                 } else if (error.request) {
                 // The request was made but no response was received
                 // `error.request` is an instance of XMLHttpRequest in the browser and an instance of

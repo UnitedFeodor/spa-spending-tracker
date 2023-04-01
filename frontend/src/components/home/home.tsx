@@ -14,38 +14,35 @@ const Home = () => {
     const [limits,setLimits] = useState(null as any)
     const navigate = useNavigate()
 
-    const refreshAuthLogic = async (failedRequest: any) =>
-        {
-            console.log("inside refreshAuthLogic")
-            const tokenUrl = '/api/token';
-            await axios.get(tokenUrl,{ 
-                headers: authHeader(),
-                withCredentials: true,
-            }).then((response) => {
-                console.log("refreshAuthLogic response.data: ",response.data)
-                if (response.data.accessToken) {
-                    console.log("then response.data.accessToken: ",response.data.accessToken)
-                    localStorage.setItem("accessToken", JSON.stringify(response.data.accessToken));
-                    failedRequest.response.config.headers['x-access-token'] = response.data.accessToken;
-                }
-                return Promise.resolve();
-            }).catch((error) => {
-                console.log("get token .catch inside refteshAuthLogic: ",error)
-            });
-                // axios.post('https://www.example.com/auth/token/refresh').then((tokenRefreshResponse) => {
-                //     localStorage.setItem('token', tokenRefreshResponse.data.token);
-                //     failedRequest.response.config.headers['Authorization'] = 'Bearer ' + tokenRefreshResponse.data.token;
-                //     return Promise.resolve();}
+    // const refreshAuthLogic = async (failedRequest: any) =>
+    //     {
+    //         console.log("inside refreshAuthLogic")
+    //         const tokenUrl = '/api/token';
+    //         await axios.get(tokenUrl,{ 
+    //             headers: authHeader(),
+    //             withCredentials: true,
+    //         }).then((response) => {
+    //             console.log("refreshAuthLogic response.data: ",response.data)
+    //             if (response.data.accessToken) {
+    //                 console.log("then response.data.accessToken: ",response.data.accessToken)
+    //                 localStorage.setItem("accessToken", JSON.stringify(response.data.accessToken));
+    //                 failedRequest.response.config.headers['x-access-token'] = response.data.accessToken;
+    //             } 
+    //             return Promise.resolve();
+    //         }).catch((error) => {
+    //             console.log("get token .catch inside refteshAuthLogic: ",error)
 
+    //         });
             
-        }
+    //     }
 
-    // Instantiate the interceptor
-    createAuthRefreshInterceptor(axios, refreshAuthLogic as any,{
-        pauseInstanceWhileRefreshing: false, // default: false
-    });
+    // // Instantiate the interceptor
+    // createAuthRefreshInterceptor(axios, refreshAuthLogic as any,{
+    //     pauseInstanceWhileRefreshing: false, // default: false
+    // });
 
     useEffect(() => {
+        
         const apiUrl = '/api/spendings';
 
         //console.log("authHeader is ",authHeader())
@@ -62,65 +59,18 @@ const Home = () => {
             setLimits(data.limits)
         }).catch((error) => {
             console.log("inside get .catch")
-            //alert("Please, sign in once again.")
+            // console.log("authHeader() == null",authHeader() == null)
+            // console.log(authHeader())
+            if (Object.keys(authHeader()).length === 0 ) {
+                alert("Please, sign in once again.")
+                handleLogout(navigate) 
+            }
             
-            //handleLogout(navigate) 
 
         })
+        
     }, []);
-            // axios.get(apiUrl,{ 
-            //     headers: authHeader(),
-            //     withCredentials: true,
-            // }).then((resp) => {
 
-                
-            //     console.log("get.then in useEffect")
-            //     const data = resp.data;
-            //     console.log("resp.data is ",resp.data);
-            //     console.log("resp.data.list is ",resp.data.list);
-            //     setSpendingsList(data.list);
-            //     setLimits(data.limits)
-            // }).catch((error) => {
-                
-            //     const tokenUrl = '/api/token';
-            //     axios.get(tokenUrl,{ 
-            //         headers: authHeader(),
-            //         withCredentials: true,
-            //     }).then((response) => {
-                    
-            //         if (response.data.accessToken) {
-            //             console.log("then response.data.accessToken: ",response.data.accessToken)
-            //             localStorage.setItem("accessToken", JSON.stringify(response.data.accessToken));
-
-            //         axios.get(apiUrl,{ 
-            //             headers: authHeader(),
-            //             withCredentials: true,
-            //           }).then((resp) => {
-            
-                        
-            //             console.log("get.then in useEffect")
-            //             const data = resp.data;
-            //             console.log("resp.data is ",resp.data);
-            //             console.log("resp.data.list is ",resp.data.list);
-            //             setSpendingsList(data.list);
-            //             setLimits(data.limits)
-            //         })
-            //         } else {
-            //             alert("Please, sign in once again.")
-            
-            //             handleLogout(navigate) 
-            //         }
-
-            //     }).catch((response) => {
-                
-            //         alert("Please, sign in once again.")
-                
-            //         handleLogout(navigate) 
-            
-            //     })
-
-            
-            // })
       
     
     const handleLogout = (event : any) => {
@@ -130,6 +80,7 @@ const Home = () => {
             headers: authHeader(),
             withCredentials: true,
           }).then((res) => {
+            console.log(".then navigate...")
             navigate("/login")
         })
     }
@@ -139,38 +90,42 @@ const Home = () => {
         event.preventDefault();
         
         axios.delete(`/api/spendings/${event.target._id.value}`,{ 
-            headers: authHeader(),
-            withCredentials: true,
-          }).then((res) => {
+                headers: authHeader(),
+                withCredentials: true,
+            }).then((res) => {
                 console.log("postForm.then")
                 const apiUrl = '/api/spendings';
                 axios.get(apiUrl).then((resp) => {
-                console.log("get in post.then  ")
-                const data = resp.data;
-                console.log("resp.data is ",resp.data);
-                console.log("resp.data.list is ",resp.data.list);
-                setSpendingsList(data.list);
-                setLimits(data.limits)
+                    console.log("get in post.then  ")
+                    const data = resp.data;
+                    console.log("resp.data is ",resp.data);
+                    console.log("resp.data.list is ",resp.data.list);
+                    setSpendingsList(data.list);
+                    setLimits(data.limits)
+                });
+            }).catch(function (error) {
+                if (Object.keys(authHeader()).length === 0 ) {
+                    alert("Please, sign in once again.")
+                    handleLogout(navigate) 
+                }
+                if (error.response) {
+                    // The request was made and the server responded with a status code
+                    // that falls out of the range of 2xx
+                    // alert("Internal server error! Try again later")
+                    console.log(error.response.data);
+                    console.log(error.response.status);
+                    console.log(error.response.headers);
+                } else if (error.request) {
+                    // The request was made but no response was received
+                    // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
+                    // http.ClientRequest in node.js
+                    console.log(error.request);
+                } else {
+                    // Something happened in setting up the request that triggered an Error
+                    console.log('Error', error.message);
+                }
+                console.log(error.config);
             });
-        }).catch(function (error) {
-            if (error.response) {
-                // The request was made and the server responded with a status code
-                // that falls out of the range of 2xx
-                alert("Internal server error! Try again later")
-                console.log(error.response.data);
-                console.log(error.response.status);
-                console.log(error.response.headers);
-            } else if (error.request) {
-                // The request was made but no response was received
-                // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
-                // http.ClientRequest in node.js
-                console.log(error.request);
-            } else {
-                // Something happened in setting up the request that triggered an Error
-                console.log('Error', error.message);
-            }
-            console.log(error.config);
-          });
 
         //"proxy": "http://localhost:3001"
 

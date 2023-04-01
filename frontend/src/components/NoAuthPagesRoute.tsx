@@ -6,6 +6,7 @@ import {
   
   export function NoAuthPagesRoute({ children }: RouteProps): JSX.Element {
     const isLoggedIn = Object.keys(authHeader()).length !== 0 
+    console.log("NoAuthPagesRoute isLoggedIn",isLoggedIn)
     return (
       <>
         {
