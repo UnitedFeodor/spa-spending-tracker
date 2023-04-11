@@ -209,8 +209,12 @@ router.post('/register', async (req,res) => {
         dbLogin = await userModel.find({email})
         console.log("dbLogin",dbLogin)
         
-        if(dbLogin !== null && dbLogin.length !== 0) {
-            res.send({error: "such user already exists"})
+        if (dbLogin !== null && dbLogin.length !== 0) {
+            res.status(502)
+            res.send({error: "Such user already exists!"})
+        } else if (email === '' || password === '') { 
+            res.status(502)
+            res.send({error: "Empty login and password are not allowed!"})
         } else {
 
             let hashedPassword = bcrypt.hashSync(password, 8);

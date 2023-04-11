@@ -29,6 +29,8 @@ const AuthRootComponent = () => {
                     if (response.data.accessToken) {
                         localStorage.setItem("accessToken", JSON.stringify(response.data.accessToken));
                         navigate("/")
+                    } else {
+                        alert("Inavlid login and password combination!")
                     }
             })
             
@@ -42,9 +44,15 @@ const AuthRootComponent = () => {
 
                     if (response.status === 200) {
                         navigate("/login")
-                    } 
+                    } else if (response.status === 502)  {
+                        alert(response.data.error)
+                    }
                 
-            })
+                }).catch(err => {
+                    console.log("register error",err)
+                    alert(err.response.data.error)
+                    //alert("Inavlid login and password combination!")
+                })
             
         }
 
